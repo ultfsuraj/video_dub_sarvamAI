@@ -59,7 +59,7 @@ const Text = ({ text, className, buttonProps }: TextProps) => {
   return (
     <div
       className={cn(
-        'px-2 py-1 w-full flex flex-col flex-centerrounded-md border border-svm-7 bg-svm-1 drop-shadow-sm',
+        'px-2 py-1 w-full flex flex-col flex-center rounded-md border border-svm-7 bg-svm-1 drop-shadow-sm',
         className,
         isLoading ? 'select-none pointer-events-none' : ''
       )}
@@ -71,7 +71,7 @@ const Text = ({ text, className, buttonProps }: TextProps) => {
         className="w-full text-center content-center body-sm px-2 py-1 grow"
       />
 
-      <div className="h-5 self-end">
+      <div className="h-5.5 self-end mb-2">
         {buttonProps && (
           <button
             className={cn(
