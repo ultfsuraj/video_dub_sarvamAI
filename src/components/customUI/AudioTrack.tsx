@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
+import { Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 interface Dimensions {
@@ -10,21 +11,33 @@ interface Dimensions {
 interface AudioTrackProps {
   height: number;
   clips: Array<{ width: number; x: number }>;
+  classname?: string;
 }
 
-const AudioTrack: React.FC<AudioTrackProps> = ({ height, clips }) => {
+const AudioTrack: React.FC<AudioTrackProps> = ({
+  height,
+  clips,
+  classname,
+}) => {
+  const [isMuted, setIsMuted] = useState(false);
+
   return (
-    <div
-      id="container"
-      className={cn(
-        'w-full border border-gray-400 relative overflow-hidden p-2 min-h-[20px]'
-      )}
-      style={{ height: `${height}px` }}
-    >
-      {/* calculate x and width for each clip */}
-      {clips.map((_, index) => (
-        <Clip id={index} key={index} height={height} clips={clips} />
-      ))}
+    <div className="w-full flex-center">
+      <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
+      <div
+        id="container"
+        className={cn(
+          'w-full border border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
+          isMuted ? 'opacity-60 pointer-events-none' : '',
+          classname
+        )}
+        style={{ height: `${height}px` }}
+      >
+        {/* calculate x and width for each clip */}
+        {clips.map((_, index) => (
+          <Clip id={index} key={index} height={height} clips={clips} />
+        ))}
+      </div>
     </div>
   );
 };
@@ -82,7 +95,7 @@ function getBounds(
   return clips[id];
 }
 
-const Clip = ({
+export const Clip = ({
   id,
   height,
   clips,
@@ -163,6 +176,47 @@ const Clip = ({
         }
       }}
     ></Rnd>
+  );
+};
+
+interface SpeakerToggleProps {
+  height: number;
+  color?: string;
+  className?: string;
+  onClick?: () => void;
+}
+
+export const SpeakerToggle = ({
+  height,
+  color = 'text-svm-9',
+  className,
+  onClick,
+}: SpeakerToggleProps) => {
+  const [isMuted, setIsMuted] = useState(false);
+
+  return (
+    <button
+      onClick={() => {
+        if (onClick) {
+          onClick();
+        }
+        setIsMuted(!isMuted);
+      }}
+      className={cn('mr-2', className)}
+      aria-label={isMuted ? 'Unmute' : 'Mute'}
+    >
+      {isMuted ? (
+        <VolumeX
+          className={cn(color)}
+          style={{ height: `${0.6 * height}px`, width: `${0.6 * height}px` }}
+        />
+      ) : (
+        <Volume2
+          className={cn(color)}
+          style={{ height: `${0.6 * height}px`, width: `${0.6 * height}px` }}
+        />
+      )}
+    </button>
   );
 };
 
