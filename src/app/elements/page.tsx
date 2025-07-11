@@ -4,7 +4,7 @@ import { delay } from '@/utils/delay';
 import { useEffect, useRef, useState } from 'react';
 import Slider from '@/components/customUI/Slider';
 import Text from '@/components/customUI/Text';
-import AudioTrack from '@/components/customUI/AudioTrack';
+import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
 
 const clickDelay = async (val: string): Promise<void> => {
   await delay(1500);
@@ -64,13 +64,16 @@ function Parent() {
 
   return (
     <div className="w-full">
-      <Slider
-        value={value}
-        onMouseUp={handleDrag}
-        min={0}
-        max={100}
-        step={0.5}
-      />
+      <div className="w-full flex">
+        <SpeakerToggle height={40} />
+        <Slider
+          value={value}
+          onMouseUp={handleDrag}
+          min={0}
+          max={100}
+          step={0.5}
+        />
+      </div>
       <button
         className="mt-4 text-sm bg-svm-9 text-white px-2 py-1 rounded hover:bg-svm-8"
         onClick={() => {
