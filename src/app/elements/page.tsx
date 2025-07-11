@@ -1,16 +1,31 @@
 'use client';
 
-import Text from '@/components/customUI/Text';
 import { delay } from '@/utils/delay';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Slider from '@/components/customUI/Slider';
+import Text from '@/components/customUI/Text';
+import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
 
 const clickDelay = async (val: string): Promise<void> => {
   await delay(1500);
   console.log(val);
 };
 
-const page = () => {
+const clips: { width: number; x: number }[] = [
+  { width: 20, x: 5 },
+  { width: 80, x: 30 },
+  { width: 60, x: 120 },
+];
+
+const Page = () => {
+  const audioRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // Access current value on mount
+    if (audioRef.current) {
+      console.log('Audio DOM element:', audioRef.current.offsetWidth);
+    }
+  }, []);
+
   return (
     <div className="w-1/2 flex flex-col gap-4 ml-4 mt-4">
       {/* Text Component */}
@@ -29,11 +44,15 @@ const page = () => {
       <div className=" border-1 bg-gray-100 border-black w-full  px-4 py-6">
         <Parent />
       </div>
+      {/* AudioTrack Component */}
+      <div className="border-1 bg-gray-100 border-black w-full px-4 py-6 ">
+        <AudioTrack height={40} clips={clips} ref={audioRef} />
+      </div>
     </div>
   );
 };
 
-export default page;
+export default Page;
 
 function Parent() {
   const [value, setValue] = useState<number>(40);
@@ -45,13 +64,16 @@ function Parent() {
 
   return (
     <div className="w-full">
-      <Slider
-        value={value}
-        onMouseUp={handleDrag}
-        min={0}
-        max={100}
-        step={0.5}
-      />
+      <div className="w-full flex">
+        <SpeakerToggle height={40} />
+        <Slider
+          value={value}
+          onMouseUp={handleDrag}
+          min={0}
+          max={100}
+          step={0.5}
+        />
+      </div>
       <button
         className="mt-4 text-sm bg-svm-9 text-white px-2 py-1 rounded hover:bg-svm-8"
         onClick={() => {
