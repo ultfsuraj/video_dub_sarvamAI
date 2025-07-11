@@ -1,32 +1,95 @@
 /* globals.css */
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Add global base styles */
 @layer base {
   body {
     @apply min-h-screen w-full m-0;
-    font-family: 'Twkeverett', sans-serif;
+    font-family: 'Inter', sans-serif;
     background-image: url('/left-gradient.svg'), url('/right-gradient.svg');
     background-repeat: no-repeat, no-repeat;
     background-position:
       left top,
       right top;
     background-size: cover, cover;
+    user-select: none;
   }
 }
 
 /* Add reusable component classes */
 @layer components {
-  .btn-primary {
-    outline: none;
-    @apply bg-blue-600 text-white py-2 px-4 rounded;
+  /* Headings */
+  .heading-xl {
+    @apply text-3xl leading-tight font-bold tracking-tight;
+  }
+
+  .heading-lg {
+    @apply text-2xl leading-snug font-semibold;
+  }
+
+  .heading-md {
+    @apply text-xl leading-relaxed font-medium;
+  }
+
+  /* Base Body Texts */
+  .body-base {
+    @apply text-base leading-7 text-gray-900;
+  }
+
+  .body-base-muted {
+    @apply text-base leading-7 text-gray-600;
+  }
+
+  .body-base-light {
+    @apply text-base leading-7 text-gray-400;
+  }
+
+  .body-base-secondary {
+    @apply text-base leading-7 text-gray-500;
+  }
+
+  /* Small Body Texts */
+  .body-sm {
+    @apply text-sm leading-6 text-gray-700;
+  }
+
+  .body-xs {
+    @apply text-xs leading-5 text-gray-600;
+  }
+
+  .body-muted {
+    @apply text-sm leading-6 text-gray-400;
+  }
+
+  .body-strong {
+    @apply text-base leading-6 font-semibold text-gray-900;
+  }
+
+  .body-link {
+    @apply text-sm leading-6 text-blue-600 hover:underline cursor-pointer;
+  }
+
+  /* Caption / Label */
+  .caption {
+    @apply text-xs leading-5 text-gray-500 uppercase tracking-wide font-semibold;
+  }
+
+  /* Inline code */
+  .code-inline {
+    @apply text-sm leading-6 font-mono text-pink-700 bg-pink-50 px-1 py-0.5 rounded;
+  }
+
+  /* Blockquote / Quote */
+  .quote {
+    @apply italic text-lg leading-relaxed text-gray-600;
   }
 }
 
 /* Add custom utility classes */
 @layer utilities {
-  .content-auto {
-    content-visibility: auto;
+  .flex-center {
+    @apply flex justify-center items-center;
   }
 }
 
