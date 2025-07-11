@@ -1,0 +1,42 @@
+/* globals.css */
+@import 'tailwindcss';
+
+/* Add global base styles */
+@layer base {
+  body {
+    @apply p-1;
+  }
+  h1 {
+    font-weight: 700;
+  }
+}
+
+/* Add reusable component classes */
+@layer components {
+  .btn-primary {
+    outline: none;
+    @apply bg-blue-600 text-white py-2 px-4 rounded;
+  }
+}
+
+/* Add custom utility classes */
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+}
+
+@theme {
+  --color-svm-1: #fbf1ee;
+  --color-svm-2: #f2d5cc;
+  --color-svm-3: #e9b8aa;
+  --color-svm-4: #e19c89;
+  --color-svm-5: #d88067;
+  --color-svm-6: #cf6345;
+  --color-svm-7: #ba4e30;
+  --color-svm-8: #984027;
+  --color-svm-9: #76321e;
+  --color-svm-10: #552316;
+  --color-svm-11: #33150d;
+  --color-svm-12: #110704;
+}
