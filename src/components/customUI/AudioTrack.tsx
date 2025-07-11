@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/utils/cn';
@@ -14,33 +14,32 @@ interface AudioTrackProps {
   classname?: string;
 }
 
-const AudioTrack: React.FC<AudioTrackProps> = ({
-  height,
-  clips,
-  classname,
-}) => {
-  const [isMuted, setIsMuted] = useState(false);
+// eslint-disable-next-line react/display-name
+const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(
+  ({ height, clips, classname }, ref) => {
+    const [isMuted, setIsMuted] = useState(false);
 
-  return (
-    <div className="w-full flex-center">
-      <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
-      <div
-        id="container"
-        className={cn(
-          'w-full border border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
-          isMuted ? 'opacity-60 pointer-events-none' : '',
-          classname
-        )}
-        style={{ height: `${height}px` }}
-      >
-        {/* calculate x and width for each clip */}
-        {clips.map((_, index) => (
-          <Clip id={index} key={index} height={height} clips={clips} />
-        ))}
+    return (
+      <div className="w-full flex-center">
+        <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
+        <div
+          ref={ref}
+          className={cn(
+            'w-full border border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
+            isMuted ? 'opacity-60 pointer-events-none' : '',
+            classname
+          )}
+          style={{ height: `${height}px` }}
+        >
+          {/* calculate x and width for each clip */}
+          {clips.map((_, index) => (
+            <Clip id={index} key={index} height={height} clips={clips} />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 // Clip component that represents the draggable and resizable audio track
 
