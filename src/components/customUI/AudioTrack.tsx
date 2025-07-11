@@ -10,8 +10,15 @@ interface Dimensions {
 
 interface AudioTrackProps {
   height: number;
-  clips: Array<{ width: number; x: number }>;
   classname?: string;
+  clips: Array<{ width: number; x: number }>;
+  onDragStop?: () => void;
+  onResizeStop?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  bgClass?: string;
+  bgHoverClass?: string;
+  borderClass?: string;
 }
 
 // eslint-disable-next-line react/display-name
@@ -43,17 +50,8 @@ const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(
 
 // Clip component that represents the draggable and resizable audio track
 
-interface ClipProps {
+interface ClipProps extends AudioTrackProps {
   id: number;
-  height: number;
-  clips: Array<{ width: number; x: number }>;
-  onDragStop?: () => void;
-  onResizeStop?: () => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
-  bgClass?: string;
-  bgHoverClass?: string;
-  borderClass?: string;
 }
 
 // return new x and width of clip
