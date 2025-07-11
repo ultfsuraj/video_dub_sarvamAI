@@ -3,8 +3,9 @@
 import Text from '@/components/customUI/Text';
 import { delay } from '@/utils/delay';
 
-const clickDelay = async (): Promise<void> => {
+const clickDelay = async (val: string): Promise<void> => {
   await delay(1500);
+  console.log(val);
 };
 
 const page = () => {

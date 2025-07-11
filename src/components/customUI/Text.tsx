@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 type ButtonProps = {
   btnText: string;
   loadingTxt: string;
-  onClick: () => void;
+  onClick: (val: string) => void;
 };
 
 interface TextProps {
@@ -80,8 +80,7 @@ const Text = ({ text, className, buttonProps }: TextProps) => {
             )}
             onClick={async () => {
               setIsLoading(true);
-              await buttonProps.onClick();
-              alert(dubText);
+              await buttonProps.onClick(dubText);
               setIsLoading(false);
             }}
             disabled={isLoading}
