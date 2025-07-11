@@ -12,19 +12,6 @@ interface AudioTrackProps {
   clips: Array<{ width: number; x: number }>;
 }
 
-// return new x and width of clip
-function getBounds(
-  clips: Array<{ width: number; x: number }>,
-  id: number,
-  x: number,
-  width: number
-): {
-  x: number;
-  width: number;
-} {
-  return { x: x, width: width };
-}
-
 const AudioTrack: React.FC<AudioTrackProps> = ({ height, clips }) => {
   return (
     <div
@@ -57,6 +44,44 @@ interface ClipProps {
   borderClass?: string;
 }
 
+// return new x and width of clip
+function getBounds(
+  clips: Array<{ width: number; x: number }>,
+  id: number,
+  x: number,
+  width: number,
+  drag: boolean
+): {
+  x: number;
+  width: number;
+} {
+  if (clips.length === 1) {
+    return { x, width };
+  }
+  let left = x;
+  let right = x + width;
+  const prevRight = id > 0 ? clips[id - 1].x + clips[id - 1].width : 0;
+  const nextLeft = id < clips.length - 1 ? clips[id + 1].x : Infinity;
+
+  if (left <= prevRight) {
+    left = prevRight;
+    if (drag) {
+      right = left + width - 1;
+    }
+  }
+  if (right >= nextLeft) {
+    right = nextLeft;
+    if (drag) {
+      left = right - width + 1;
+    }
+  }
+
+  clips[id].x = left;
+  clips[id].width = right - left + 1;
+
+  return clips[id];
+}
+
 const Clip = ({
   id,
   height,
@@ -75,7 +100,7 @@ const Clip = ({
   });
 
   const handleDragStop: RndDragCallback = (e, d) => {
-    const bounds = getBounds(clips, id, d.x, dimensions.width);
+    const bounds = getBounds(clips, id, d.x, dimensions.width, true);
 
     setDimensions((prev) => ({ ...prev, x: bounds.x }));
     if (onDragStop) {
@@ -90,7 +115,7 @@ const Clip = ({
     delta,
     position
   ) => {
-    const bounds = getBounds(clips, id, position.x, ref.offsetWidth);
+    const bounds = getBounds(clips, id, position.x, ref.offsetWidth, false);
 
     setDimensions({
       width: bounds.width,
@@ -99,7 +124,6 @@ const Clip = ({
     if (onResizeStop) {
       onResizeStop();
     }
-    console.log('width', ref.offsetWidth);
   };
 
   return (
