@@ -4,10 +4,14 @@
 /* Add global base styles */
 @layer base {
   body {
-    @apply p-1;
-  }
-  h1 {
-    font-weight: 700;
+    @apply min-h-screen w-full m-0;
+    font-family: 'Twkeverett', sans-serif;
+    background-image: url('/left-gradient.svg'), url('/right-gradient.svg');
+    background-repeat: no-repeat, no-repeat;
+    background-position:
+      left top,
+      right top;
+    background-size: cover, cover;
   }
 }
 
