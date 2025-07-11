@@ -1,49 +1,51 @@
 'use client';
 
-import { cn } from '@/utils/cn';
+import Text from '@/components/customUI/Text';
 import { delay } from '@/utils/delay';
 
-async function handleBoxClick(boxNumber: number) {
-  await delay(1000);
-  alert(`Box ${boxNumber} clicked!`);
-}
-
-function Boxes() {
-  return (
-    <>
-      <div onClick={() => handleBoxClick(1)} className="p-2 bg-svm-1 h-20 w-20">
-        1
-      </div>
-      <div onClick={() => handleBoxClick(2)} className="p-2 bg-svm-1 h-20 w-20">
-        2
-      </div>
-      <div onClick={() => handleBoxClick(3)} className="p-2 bg-svm-1 h-20 w-20">
-        3
-      </div>
-      <div onClick={() => handleBoxClick(4)} className="p-2 bg-svm-1 h-20 w-20">
-        4
-      </div>
-      <div
-        onClick={() => handleBoxClick(5)}
-        className={cn(
-          'p-2 bg-svm-1 h-20 w-20',
-          `border border-svm-${6} shadow-xl`
-        )}
-      >
-        5
-      </div>
-      <div className="p-2 bg-svm-1 h-20 w-20">-</div>
-      <div className="p-2 bg-svm-1 h-20 w-20">-</div>
-      <div className="p-2 bg-svm-1 h-20 w-20">-</div>
-      <div className="p-2 bg-svm-1 h-20 w-20">-</div>
-    </>
-  );
-}
+const clickDelay = async (): Promise<void> => {
+  await delay(1500);
+};
 
 function App() {
   return (
-    <div className="border-2 border-black w-2xs h-96 p-2 flex flex-wrap justify-around items-around">
-      <Boxes />
+    <div className="grid grid-cols-2 gap-x-5 gap-y-3 border-2 bg-gray-100 border-black w-1/2  px-4 py-6 flex flex-wrap justify-around items-around">
+      <Text text="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+      <Text
+        text="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        buttonProps={{
+          btnText: 'Generate Audio',
+          loadingTxt: 'Generating...',
+          onClick: clickDelay,
+        }}
+      />
+      <Text text="lorem ipsum dolor sit amet," />
+      <Text
+        text="lorem ipsum dolor sit amet,"
+        buttonProps={{
+          btnText: 'Generate Audio',
+          loadingTxt: 'Generating...',
+          onClick: clickDelay,
+        }}
+      />
+      <Text text="lorem ipsum dolor sit amet, labore et dolore magna aliqua." />
+      <Text
+        text="lorem ipsum dolor sit amet,  labore et dolore magna aliqua."
+        buttonProps={{
+          btnText: 'Generate Audio',
+          loadingTxt: 'Generating...',
+          onClick: clickDelay,
+        }}
+      />
+      <Text text="consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+      <Text
+        text="consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        buttonProps={{
+          btnText: 'Generate Audio',
+          loadingTxt: 'Generating...',
+          onClick: clickDelay,
+        }}
+      />
     </div>
   );
 }
