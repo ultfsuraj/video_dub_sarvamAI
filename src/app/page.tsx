@@ -1,5 +1,7 @@
 'use client';
 
+import { cn } from '../utils/cn';
+
 function Boxes() {
   return (
     <>
@@ -7,7 +9,12 @@ function Boxes() {
       <div className="p-2 bg-svm-1 h-20 w-20">-</div>
       <div className="p-2 bg-svm-1 h-20 w-20">-</div>
       <div className="p-2 bg-svm-1 h-20 w-20">-</div>
-      <div className="p-2 bg-svm-1 h-20 w-20 border border-svm-6 shadow-xl">
+      <div
+        className={cn(
+          'p-2 bg-svm-1 h-20 w-20',
+          `border border-svm-${6} shadow-xl`
+        )}
+      >
         -
       </div>
       <div className="p-2 bg-svm-1 h-20 w-20">-</div>
