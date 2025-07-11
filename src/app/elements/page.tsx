@@ -1,5 +1,6 @@
 'use client';
 
+import Slider from '@/components/customUI/Slider';
 import Text from '@/components/customUI/Text';
 import { delay } from '@/utils/delay';
 
@@ -10,9 +11,9 @@ const clickDelay = async (val: string): Promise<void> => {
 
 const page = () => {
   return (
-    <div className="w-1/2">
+    <div className="w-1/2 flex flex-col gap-4 ml-4 mt-4">
       {/* Text Component */}
-      <div className="grid grid-cols-2 gap-x-5 gap-y-3 border-1 bg-gray-100 border-black w-full  px-4 py-6 flex flex-wrap justify-around items-around">
+      <div className="grid grid-cols-2 gap-x-5 gap-y-3 border-1 bg-gray-100 border-black w-full  px-4 py-6">
         <Text text="lorem ipsum dolor sit amet, consectetur adipiscing elit.." />
         <Text
           text="lorem ipsum dolor sit amet"
@@ -22,6 +23,10 @@ const page = () => {
             onClick: clickDelay,
           }}
         />
+      </div>
+      {/* Slider Component */}
+      <div className=" border-1 bg-gray-100 border-black w-full  px-4 py-6l">
+        <Slider />
       </div>
     </div>
   );
