@@ -76,8 +76,8 @@ const Page = () => {
         <DropDown items={languages} />
       </div>
       {/* VideoImport Component */}
-      <div className="border-1 bg-gray-100 border-black w-full px-4 py-6">
-        <VideoImport />
+      <div className="border-1 h-[40vh] bg-gray-100 border-black w-full px-4 py-6">
+        <VideoImport className="w-full h-full" />
       </div>
     </div>
   );
