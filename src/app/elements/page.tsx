@@ -6,6 +6,7 @@ import Slider from '@/components/customUI/Slider';
 import Text from '@/components/customUI/Text';
 import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
 import DropDown from '@/components/customUI/DropDown';
+import VideoImport from '@/components/customUI/VideoImport';
 
 const clickDelay = async (val: string): Promise<void> => {
   await delay(1500);
@@ -79,6 +80,10 @@ const Page = () => {
       {/* Dropdown Component */}
       <div className="border-1 bg-gray-100 border-black w-full px-4 py-6">
         <DropDown items={languages} />
+      </div>
+      {/* VideoImport Component */}
+      <div className="border-1 bg-gray-100 border-black w-full px-4 py-6">
+        <VideoImport />
       </div>
     </div>
   );
