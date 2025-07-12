@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useState } from 'react';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { Volume2, VolumeX } from 'lucide-react';
