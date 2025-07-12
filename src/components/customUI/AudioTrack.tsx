@@ -32,12 +32,13 @@ const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(
         <div
           ref={ref}
           className={cn(
-            'w-full border border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
+            'relative w-full border-l-1 border-r-1 rounded-md border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
             isMuted ? 'opacity-60 pointer-events-none' : '',
             classname
           )}
           style={{ height: `${height}px` }}
         >
+          <div className="absolute top-1/2 left-0 w-full border-t border-gray-400" />
           {/* calculate x and width for each clip */}
           {clips.map((_, index) => (
             <Clip id={index} key={index} height={height} clips={clips} />
