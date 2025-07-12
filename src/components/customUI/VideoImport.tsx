@@ -3,7 +3,7 @@
 import { cn } from '@/utils/cn';
 import { useState, useRef, forwardRef } from 'react';
 
-const VideoImport = () => {
+const VideoImport = ({ className = '' }: { className?: string }) => {
   const [progress, setProgress] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   // const [uploading, setUploading] = useState(false);
@@ -52,7 +52,7 @@ const VideoImport = () => {
   };
 
   return (
-    <div className="w-full h-[50vh] max-w-md mx-auto p-4 border rounded shadow flex flex-col ">
+    <div className={cn('w-full h-[50vh] flex flex-col ', className)}>
       <div className="grow flex-center">
         {videoUrl ? (
           <Video ref={videoRef} src={videoUrl} />
@@ -68,14 +68,14 @@ const VideoImport = () => {
           <div className="caption text-center content-center flex justify-between">
             <button
               className={cn(
-                'flex body-sm justify-between items-center gap-1 border px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
+                'flex body-sm justify-between items-center gap-1 px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
               )}
             >
               Delete
             </button>
             <button
               className={cn(
-                'flex body-sm  justify-between items-center gap-1 border px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
+                'flex body-sm  justify-between items-center gap-1  px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
               )}
             >
               Export
@@ -120,7 +120,7 @@ export const Import = ({
   themeClass?: string;
 }) => {
   return (
-    <div className={cn('flex-center flex-col border-1 h-full w-full')}>
+    <div className={cn('flex-center flex-col h-full w-full')}>
       {/* Import button */}
       <label className="mb-2">
         <input
