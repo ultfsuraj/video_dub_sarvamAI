@@ -175,7 +175,9 @@ export const Clip = ({
           onMouseLeave();
         }
       }}
-    ></Rnd>
+    >
+      <div className="w-full h-1/2 bg-repeat-x bg-center bg-[url('/sound.svg')] bg-[length:auto_100%]"></div>
+    </Rnd>
   );
 };
 
