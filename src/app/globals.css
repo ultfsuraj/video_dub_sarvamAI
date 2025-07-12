@@ -15,6 +15,9 @@
     background-size: cover, cover;
     user-select: none;
   }
+  body > div {
+    overflow: hidden;
+  }
 }
 
 /* Add reusable component classes */
