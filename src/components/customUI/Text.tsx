@@ -11,6 +11,8 @@ interface TextProps {
   text: string;
   className?: string;
   buttonProps?: ButtonProps;
+  btnClass?: string;
+  btnContainerClass?: string;
 }
 
 type AutoTextAreaProps = {
@@ -53,7 +55,13 @@ const AutoTextArea: React.FC<AutoTextAreaProps> = ({
   );
 };
 
-const Text = ({ text, className, buttonProps }: TextProps) => {
+const Text = ({
+  text,
+  className,
+  buttonProps,
+  btnClass = '',
+  btnContainerClass = '',
+}: TextProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dubText, setDubText] = useState<string>(text);
   return (
@@ -71,12 +79,13 @@ const Text = ({ text, className, buttonProps }: TextProps) => {
         className="w-full text-center content-center body-sm px-2 py-1 grow"
       />
 
-      <div className="h-5.5 self-end mb-2">
+      <div className={cn('h-5.5 self-end mb-2', btnContainerClass)}>
         {buttonProps && (
           <button
             className={cn(
               'h-full w-25 rounded-sm bg-svm-9 body-xs text-white text-center',
-              isLoading ? 'bg-svm-8 cursor-not-allowed' : ''
+              isLoading ? 'bg-svm-8 cursor-not-allowed' : '',
+              btnClass
             )}
             onClick={async () => {
               setIsLoading(true);
