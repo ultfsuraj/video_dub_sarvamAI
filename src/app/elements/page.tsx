@@ -1,7 +1,7 @@
 'use client';
 
 import { delay } from '@/utils/delay';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Slider from '@/components/customUI/Slider';
 import Text from '@/components/customUI/Text';
 import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
@@ -48,15 +48,9 @@ const languages: string[] = [
 
 const Page = () => {
   const audioRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    // Access current value on mount
-    if (audioRef.current) {
-      console.log('Audio DOM element:', audioRef.current.offsetWidth);
-    }
-  }, []);
 
   return (
-    <div className="w-1/2 flex flex-col gap-4 ml-4 mt-4">
+    <div className="w-1/2 flex flex-col gap-4 ml-4 mt-4 min-h-[300vh]">
       {/* Text Component */}
       <div className="grid grid-cols-2 gap-x-5 gap-y-3 border-1 bg-gray-100 border-black w-full  px-4 py-6">
         <Text text="lorem ipsum dolor sit amet, consectetur adipiscing elit.." />
