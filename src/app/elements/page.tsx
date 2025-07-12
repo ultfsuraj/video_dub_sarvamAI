@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Slider from '@/components/customUI/Slider';
 import Text from '@/components/customUI/Text';
 import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
+import DropDown from '@/components/customUI/DropDown';
 
 const clickDelay = async (val: string): Promise<void> => {
   await delay(1500);
@@ -15,6 +16,33 @@ const clips: { width: number; x: number }[] = [
   { width: 20, x: 5 },
   { width: 80, x: 30 },
   { width: 60, x: 120 },
+];
+const languages: string[] = [
+  'Hindi',
+  'Marathi',
+  'Bangali',
+  'Telugu',
+  'Tamil',
+  'Kannada',
+  'Marwari',
+  'Odia',
+  'Punjabi',
+  'Gujarati',
+  'Malayalam',
+  'Assamese',
+  'Urdu',
+  'English',
+  'Bhojpuri',
+  'Haryanvi',
+  'Rajasthani',
+  'Konkani',
+  'Sindhi',
+  'Dogri',
+  'Santali',
+  'Kashmiri',
+  'Nepali',
+  'Manipuri',
+  'Bodo',
 ];
 
 const Page = () => {
@@ -47,6 +75,10 @@ const Page = () => {
       {/* AudioTrack Component */}
       <div className="border-1 bg-gray-100 border-black w-full px-4 py-6 ">
         <AudioTrack height={40} clips={clips} ref={audioRef} />
+      </div>
+      {/* Dropdown Component */}
+      <div className="border-1 bg-gray-100 border-black w-full px-4 py-6">
+        <DropDown items={languages} />
       </div>
     </div>
   );
