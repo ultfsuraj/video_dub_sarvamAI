@@ -3,7 +3,12 @@ export type ScriptType = {
   text: string;
 };
 
-export const CLIPS: { width: number; x: number }[] = [
+export type ClipType = {
+  width: number | `${number}%`;
+  x: number;
+};
+
+export const DUB_CLIPS: Array<ClipType> = [
   { width: 20, x: 5 },
   { width: 80, x: 30 },
   { width: 60, x: 120 },
@@ -13,6 +18,8 @@ export const CLIPS: { width: number; x: number }[] = [
   { width: 20, x: 400 },
   { width: 80, x: 430 },
 ];
+
+export const SCRIPT_CLIPS: Array<ClipType> = [{ width: '100.1%', x: 0 }];
 
 export const SCRIPTS: Array<ScriptType> = [
   {

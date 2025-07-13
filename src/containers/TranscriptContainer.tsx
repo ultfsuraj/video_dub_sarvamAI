@@ -11,7 +11,7 @@ const clickDelay = async (val: string): Promise<void> => {
   console.log(val);
 };
 
-const Transcript = ({
+const TranscriptContainer = ({
   scripts,
   dubScripts,
   isFileUploaded,
@@ -28,26 +28,17 @@ const Transcript = ({
     <div className="w-1/2 h-full flex flex-col justify-around grow drop-shadow-lg rounded-md invisible-scroll gap-2 p-x-2  ">
       {!isFileUploaded && !isTranscriptLoading && !isTranslationLoading ? (
         <div className="flex justify-around  w-full grow gap-2">
-          <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
-            Original Transcript
-          </div>
-          <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
-            Dubbed Translation
-          </div>
+          <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">Original Transcript</div>
+          <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">Dubbed Translation</div>
         </div>
       ) : null}
 
       {isFileUploaded && isTranscriptLoading && !isTranslationLoading ? (
         <div className="flex justify-around  w-full grow gap-2">
           <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
-            <CustomLoader
-              text="Loading..."
-              spinnerClass="[animation-duration:1.5s]"
-            />
+            <CustomLoader text="Loading..." spinnerClass="[animation-duration:1.5s]" />
           </div>
-          <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
-            Dubbed Translation
-          </div>
+          <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">Dubbed Translation</div>
         </div>
       ) : null}
 
@@ -59,10 +50,7 @@ const Transcript = ({
             ))}
           </div>
           <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center max-h-[50vh] caption">
-            <CustomLoader
-              text="Translating..."
-              spinnerClass="[animation-duration:1.5s]"
-            />
+            <CustomLoader text="Translating..." spinnerClass="[animation-duration:1.5s]" />
           </div>
         </div>
       ) : null}
@@ -87,4 +75,4 @@ const Transcript = ({
   );
 };
 
-export default Transcript;
+export default TranscriptContainer;
