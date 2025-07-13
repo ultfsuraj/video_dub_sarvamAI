@@ -4,7 +4,7 @@ export type ScriptType = {
 };
 
 export type ClipType = {
-  width: number | `${number}%`;
+  width: number;
   x: number;
 };
 
@@ -19,7 +19,7 @@ export const DUB_CLIPS: Array<ClipType> = [
   { width: 80, x: 430 },
 ];
 
-export const SCRIPT_CLIPS: Array<ClipType> = [{ width: '100.1%', x: 0 }];
+export const SCRIPT_CLIPS: Array<ClipType> = [{ width: 10000, x: 0 }];
 
 export const SCRIPTS: Array<ScriptType> = [
   {

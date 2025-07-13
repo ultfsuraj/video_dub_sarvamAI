@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import Slider from '@/components/customUI/Slider';
-import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
 import VideoImport from '@/components/customUI/VideoImport';
 import TranscriptContainer from '@/containers/TranscriptContainer';
 
@@ -22,12 +20,18 @@ const App = () => {
   const [isTranslationLoading, setTranslationLoading] = useState<boolean>(false);
   const [isAudioLoading, setAudioLoading] = useState<boolean>(false);
   const [isDubAudioLoading, setDubAudioLoading] = useState<boolean>(false);
+  const [isFileImported, setFileImported] = useState<boolean>(false);
 
   const [isFileUploaded, setFileUploaded] = useState<boolean>(false);
   const [scripts, setScripts] = useState<Array<ScriptType>>([]);
   const [dubScripts, setDubScripts] = useState<Array<ScriptType>>([]);
   const [clips, setClips] = useState<Array<ClipType>>([]);
   const [dubClips, setDubClips] = useState<Array<ClipType>>([]);
+  const [fileName, setFileName] = useState<string>('Unknown.mp4');
+  // const [sliderValue, setSliderValue] = useState<number>(0);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const dubAudioTrackRef = useRef<HTMLDivElement>(null);
 
   const uploadFlow = async () => {
     await delay(1000);
@@ -51,8 +55,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    uploadFlow();
-  }, []);
+    if (isFileImported) {
+      uploadFlow();
+    }
+  }, [isFileImported]);
 
   return (
     // main container
@@ -71,7 +77,7 @@ const App = () => {
         <div className="w-[31%] flex-center">
           <DropDown items={LANGUAGES} triggerClass="outline-none border-none h-6" dropdownContentClass="border border-svm-9 bg-slate-100" />
         </div>
-        <div className="w-[38%] flex-center text-gray-600">Unknown.mp4</div>
+        <div className="w-[38%] flex-center text-gray-600 text-center ">{fileName}</div>
       </div>
       {/* middle */}
       <div className="w-full h-[50vh] flex growjustify-between gap-2 ">
@@ -85,16 +91,29 @@ const App = () => {
         />
         {/* right half */}
         <div className=" w-[38%] drop-shadow-lg rounded-md">
-          <VideoImport className="h-full" />
+          <VideoImport ref={videoRef} setFileImported={(val) => setFileImported(val)} setFileName={(val) => setFileName(val)} className="h-full" />
         </div>
       </div>
       {/* bottom */}
       <AudioContainer
+        ref={dubAudioTrackRef}
         clips={clips}
         dubClips={dubClips}
         isFileUploaded={isFileUploaded}
         isAudioLoading={isAudioLoading}
-        isDubAudioLoading={isDubAudioLoading}
+        // sliderValue={sliderValue}
+        onMouseUp={(val: number) => {
+          console.log('slider', val);
+          // setSliderValue(val);
+          const video = videoRef.current;
+          if (video) {
+            // val : pixel to seconds (fractional)
+            // currentTime = %val X total time
+            if (video && video.duration) {
+              video.currentTime = (val / 100) * video.duration;
+            }
+          }
+        }}
       />
     </div>
   );

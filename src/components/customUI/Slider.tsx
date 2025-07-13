@@ -35,6 +35,7 @@ const Slider: React.FC<SliderProps> = ({
   }, [value]);
 
   const handleValueChange = (val: number[]) => {
+    console.log('onValueChange');
     setInternalValue(val[0]);
   };
 
@@ -46,10 +47,7 @@ const Slider: React.FC<SliderProps> = ({
 
   return (
     <SliderPrimitive.Root
-      className={cn(
-        'relative flex w-full touch-none select-none items-center',
-        className
-      )}
+      className={cn('relative flex w-full touch-none select-none items-center', className)}
       min={min}
       max={max}
       step={step}
@@ -57,22 +55,10 @@ const Slider: React.FC<SliderProps> = ({
       onValueChange={handleValueChange}
       onPointerUp={handlePointerUp}
     >
-      <SliderPrimitive.Track
-        className={cn(
-          'relative h-2 w-full grow overflow-hidden rounded-xs ',
-          bgTrackClass
-        )}
-      >
-        <SliderPrimitive.Range
-          className={cn('absolute h-full ', bgRangeClass)}
-        />
+      <SliderPrimitive.Track className={cn('relative h-2 w-full grow overflow-hidden rounded-xs ', bgTrackClass)}>
+        <SliderPrimitive.Range className={cn('absolute h-full ', bgRangeClass)} />
       </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb
-        className={cn(
-          'block h-4 w-4 rounded-sm  shadow transition-colors duration-200  focus:outline-none',
-          bgThumbClass
-        )}
-      />
+      <SliderPrimitive.Thumb className={cn('block h-4 w-4 rounded-sm  shadow transition-colors duration-200  focus:outline-none', bgThumbClass)} />
     </SliderPrimitive.Root>
   );
 };

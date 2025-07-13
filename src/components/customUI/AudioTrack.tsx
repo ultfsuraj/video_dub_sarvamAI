@@ -13,7 +13,7 @@ interface Dimensions {
 interface AudioTrackProps {
   height: number;
   classname?: string;
-  clips: Array<{ width: number | `${number}%`; x: number }>;
+  clips: Array<{ width: number; x: number }>;
   onDragStop?: () => void;
   onResizeStop?: () => void;
   onMouseEnter?: () => void;
