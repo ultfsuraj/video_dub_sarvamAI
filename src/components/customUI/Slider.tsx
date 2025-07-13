@@ -6,6 +6,7 @@ import { cn } from '@/utils/cn';
 
 type SliderProps = {
   value: number;
+  setSliderValue: (val: number) => void;
   onMouseUp?: (value: number) => void;
   min?: number;
   max?: number;
@@ -19,6 +20,7 @@ type SliderProps = {
 
 const Slider: React.FC<SliderProps> = ({
   value,
+  setSliderValue,
   onMouseUp,
   min = 0,
   max = 100,
@@ -28,20 +30,13 @@ const Slider: React.FC<SliderProps> = ({
   bgRangeClass = 'bg-svm-8',
   bgThumbClass = 'bg-slate-600 hover:bg-slate-900',
 }) => {
-  const [internalValue, setInternalValue] = useState<number>(value);
-
-  useEffect(() => {
-    setInternalValue(value);
-  }, [value]);
-
   const handleValueChange = (val: number[]) => {
-    console.log('onValueChange');
-    setInternalValue(val[0]);
+    setSliderValue(val[0]);
   };
 
   const handlePointerUp = () => {
     if (onMouseUp) {
-      onMouseUp(internalValue);
+      onMouseUp(value);
     }
   };
 
@@ -51,14 +46,19 @@ const Slider: React.FC<SliderProps> = ({
       min={min}
       max={max}
       step={step}
-      value={[internalValue]}
+      value={[value]}
       onValueChange={handleValueChange}
       onPointerUp={handlePointerUp}
     >
       <SliderPrimitive.Track className={cn('relative h-2 w-full grow overflow-hidden rounded-xs ', bgTrackClass)}>
         <SliderPrimitive.Range className={cn('absolute h-full ', bgRangeClass)} />
       </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb className={cn('block h-4 w-4 rounded-sm  shadow transition-colors duration-200  focus:outline-none', bgThumbClass)} />
+      <SliderPrimitive.Thumb
+        className={cn(
+          'block h-4 w-4 rounded-sm  shadow transition-colors duration-200  focus:outline-none',
+          bgThumbClass
+        )}
+      />
     </SliderPrimitive.Root>
   );
 };

@@ -28,7 +28,7 @@ const App = () => {
   const [clips, setClips] = useState<Array<ClipType>>([]);
   const [dubClips, setDubClips] = useState<Array<ClipType>>([]);
   const [fileName, setFileName] = useState<string>('Unknown.mp4');
-  // const [sliderValue, setSliderValue] = useState<number>(0);
+  const [sliderValue, setSliderValue] = useState<number>(0);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const dubAudioTrackRef = useRef<HTMLDivElement>(null);
@@ -63,19 +63,29 @@ const App = () => {
   return (
     // main container
     <div className="h-[100vh] w-[100vw] px-10 py-2 flex-center flex-col gap-2 bg-slate-100">
-      <div className="w-full flex-center h-10 flex heading-xl pt-6 pb-14 text-svm-10 ">Sarvam AI : Video Dubbing Tool</div>
+      <div className="w-full flex-center h-10 flex heading-xl pt-6 pb-14 text-svm-10 ">
+        Sarvam AI : Video Dubbing Tool
+      </div>
 
       {/* top */}
       <div className="w-full h-10 flex body-strong">
         <div className="w-[31%] flex-center ">
           {isTranscriptLoading ? (
-            <CustomLoader text="Detecting Language..." spinnerClass="[animation-duration:1.5s]" className="caption text-gray-700" />
+            <CustomLoader
+              text="Detecting Language..."
+              spinnerClass="[animation-duration:1.5s]"
+              className="caption text-gray-700"
+            />
           ) : (
             'English'
           )}
         </div>
         <div className="w-[31%] flex-center">
-          <DropDown items={LANGUAGES} triggerClass="outline-none border-none h-6" dropdownContentClass="border border-svm-9 bg-slate-100" />
+          <DropDown
+            items={LANGUAGES}
+            triggerClass="outline-none border-none h-6"
+            dropdownContentClass="border border-svm-9 bg-slate-100"
+          />
         </div>
         <div className="w-[38%] flex-center text-gray-600 text-center ">{fileName}</div>
       </div>
@@ -91,7 +101,18 @@ const App = () => {
         />
         {/* right half */}
         <div className=" w-[38%] drop-shadow-lg rounded-md">
-          <VideoImport ref={videoRef} setFileImported={(val) => setFileImported(val)} setFileName={(val) => setFileName(val)} className="h-full" />
+          <VideoImport
+            ref={videoRef}
+            setFileImported={(val) => setFileImported(val)}
+            setFileName={(val) => setFileName(val)}
+            onTimeUpdate={() => {
+              const video = videoRef.current;
+              if (video && video.duration) {
+                setSliderValue((video.currentTime / video.duration) * 100);
+              }
+            }}
+            className="h-full"
+          />
         </div>
       </div>
       {/* bottom */}
@@ -101,17 +122,15 @@ const App = () => {
         dubClips={dubClips}
         isFileUploaded={isFileUploaded}
         isAudioLoading={isAudioLoading}
-        // sliderValue={sliderValue}
+        sliderValue={sliderValue}
+        setSliderValue={(val) => {
+          setSliderValue(val);
+        }}
         onMouseUp={(val: number) => {
           console.log('slider', val);
-          // setSliderValue(val);
           const video = videoRef.current;
-          if (video) {
-            // val : pixel to seconds (fractional)
-            // currentTime = %val X total time
-            if (video && video.duration) {
-              video.currentTime = (val / 100) * video.duration;
-            }
+          if (video && video.duration) {
+            video.currentTime = (val / 100) * video.duration;
           }
         }}
       />

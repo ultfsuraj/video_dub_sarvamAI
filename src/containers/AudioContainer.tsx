@@ -13,28 +13,53 @@ const AudioContainer = forwardRef<
     dubClips: Array<ClipType>;
     isFileUploaded: boolean;
     isAudioLoading: boolean;
+    sliderValue?: number;
     sliderMin?: number;
     sliderMax?: number;
     sliderStep?: number;
     onMouseUp: (x: number) => void;
+    setSliderValue: (val: number) => void;
   }
->(({ clips, dubClips, isFileUploaded, isAudioLoading, sliderMin = 0, sliderMax = 100, sliderStep = 0.00001, onMouseUp }, dubAudioTrackRef) => {
-  return (
-    <div className="w-full h-[28vh] flex flex-col justify-center gap-6">
-      <div className="w-full flex">
-        <SpeakerToggle height={40} className="invisible pointer-events-none" />
-        {isFileUploaded && !isAudioLoading ? (
-          <Slider value={0} onMouseUp={onMouseUp} min={sliderMin} max={sliderMax} step={sliderStep} />
-        ) : (
-          <div></div>
-        )}
+>(
+  (
+    {
+      clips,
+      dubClips,
+      isFileUploaded,
+      isAudioLoading,
+      sliderValue = 0,
+      sliderMin = 0,
+      sliderMax = 100,
+      sliderStep = 0.001,
+      setSliderValue,
+      onMouseUp,
+    },
+    dubAudioTrackRef
+  ) => {
+    return (
+      <div className="w-full h-[28vh] flex flex-col justify-center gap-6">
+        <div className="w-full flex">
+          <SpeakerToggle height={40} className="invisible pointer-events-none" />
+          {isFileUploaded && !isAudioLoading ? (
+            <Slider
+              value={sliderValue}
+              setSliderValue={setSliderValue}
+              onMouseUp={onMouseUp}
+              min={sliderMin}
+              max={sliderMax}
+              step={sliderStep}
+            />
+          ) : (
+            <div></div>
+          )}
+        </div>
+        <div className="flex-center flex-col gap-4 ">
+          <AudioTrack height={40} clips={dubClips} ref={dubAudioTrackRef} />
+          <AudioTrack height={40} clips={clips} classname="select-none pointer-events-none " />
+        </div>
       </div>
-      <div className="flex-center flex-col gap-4 ">
-        <AudioTrack height={40} clips={dubClips} ref={dubAudioTrackRef} />
-        <AudioTrack height={40} clips={clips} classname="select-none pointer-events-none " />
-      </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default AudioContainer;
