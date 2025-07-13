@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Slider from '@/components/customUI/Slider';
 import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
@@ -9,9 +9,10 @@ import Text from '@/components/customUI/Text';
 
 import { delay } from '@/utils/delay';
 import DropDown from '@/components/customUI/DropDown';
+import CustomLoader from '@/components/customUI/Loader';
 
 const clickDelay = async (val: string): Promise<void> => {
-  await delay(1500);
+  await delay(4000);
   console.log(val);
 };
 
@@ -55,16 +56,31 @@ const languages: string[] = [
 ];
 
 const App = () => {
+  const [isTranscriptLoading, setTranscriptLoading] = useState<boolean>(false);
+  const [isTranslationLoading, setTranslationLoading] =
+    useState<boolean>(false);
+  const [isFileUploaded, setFileUploaded] = useState<boolean>(false);
+
   return (
     // main container
-    <div className="h-[100vh] w-[100vw] px-10 py-2 flex flex-col justify-center gap-2 bg-slate-100">
+    <div className="h-[100vh] w-[100vw] px-10 py-2 flex-center flex-col gap-2 bg-slate-100">
       <div className="w-full flex-center h-10 flex heading-xl pt-6 pb-14 text-svm-10 ">
         Sarvam AI : Video Dubbing Tool
       </div>
 
       {/* top */}
       <div className="w-full h-10 flex body-strong">
-        <div className="w-[31%] flex-center">English</div>
+        <div className="w-[31%] flex-center ">
+          {isTranscriptLoading ? (
+            <CustomLoader
+              text="Detecting Language..."
+              spinnerClass="[animation-duration:1.5s]"
+              className="caption text-gray-700"
+            />
+          ) : (
+            'English'
+          )}
+        </div>
         <div className="w-[31%] flex-center">
           <DropDown
             items={languages}
@@ -72,25 +88,52 @@ const App = () => {
             dropdownContentClass="border border-svm-9 bg-slate-100"
           />
         </div>
-        <div className="w-[38%] flex-center">unknown.mp4</div>
+        <div className="w-[38%] flex-center text-gray-600">Unknown.mp4</div>
       </div>
       {/* middle */}
-      <div className="w-full h-[50vh] flex growjustify-between gap-2 py-1">
+      <div className="w-full h-[50vh] flex growjustify-between gap-2 ">
         {/* left half */}
-        <div className="w-1/2 h-full flex flex-col justify-around grow drop-shadow-lg rounded-md invisible-scroll gap-2 p-2  ">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-            <div key={index} className="flex justify-around gap-2">
-              <Text text="lorem ipsum dolor sit amet, consectetur adipiscing elit.." />
-              <Text
-                text={index == 2 ? 'loading...' : 'lorem ipsum dolor sit amet'}
-                buttonProps={{
-                  btnText: 'Generate Audio',
-                  loadingTxt: 'Generating...',
-                  onClick: clickDelay,
-                }}
-              />
+        <div className="w-1/2 h-full flex flex-col justify-around grow drop-shadow-lg rounded-md invisible-scroll gap-2 p-x-2  ">
+          {!isFileUploaded ? (
+            <div className="flex justify-around  w-full grow gap-2">
+              <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
+                {isTranscriptLoading ? (
+                  <CustomLoader
+                    text="Loading..."
+                    spinnerClass="[animation-duration:1.5s]"
+                  />
+                ) : (
+                  ' Original Transcript'
+                )}
+              </div>
+              <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
+                {isTranslationLoading ? (
+                  <CustomLoader
+                    text="Translating..."
+                    spinnerClass="[animation-duration:1.5s]"
+                  />
+                ) : (
+                  'Dubbed Translation'
+                )}
+              </div>
             </div>
-          ))}
+          ) : (
+            [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+              <div key={index} className="flex justify-around gap-2">
+                <Text text="lorem ipsum dolor sit amet, consectetur adipiscing elit.." />
+                <Text
+                  text={
+                    index == 2 ? 'loading...' : 'lorem ipsum dolor sit amet'
+                  }
+                  buttonProps={{
+                    btnText: 'Generate Audio',
+                    loadingTxt: 'Generating...',
+                    onClick: clickDelay,
+                  }}
+                />
+              </div>
+            ))
+          )}
         </div>
         {/* right half */}
         <div className=" w-[38%] drop-shadow-lg rounded-md">

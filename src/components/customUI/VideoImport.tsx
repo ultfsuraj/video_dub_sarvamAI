@@ -1,13 +1,15 @@
 'use client';
 
 import { cn } from '@/utils/cn';
+import { Pause, Play } from 'lucide-react';
 import { useState, useRef, forwardRef } from 'react';
 
 const VideoImport = ({ className = '' }: { className?: string }) => {
   const [progress, setProgress] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  // const [uploading, setUploading] = useState(false);
-  // const [fileName, setFileName] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -16,8 +18,8 @@ const VideoImport = ({ className = '' }: { className?: string }) => {
     if (!file) return;
 
     setProgress(0);
-    // setUploading(true);
-    // setFileName(file.name);
+    setUploading(true);
+    setFileName(file.name);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -40,12 +42,12 @@ const VideoImport = ({ className = '' }: { className?: string }) => {
       } else {
         alert('❌ Upload failed.');
       }
-      // setUploading(false);
+      setUploading(false);
     };
 
     xhr.onerror = () => {
       alert('❌ Upload error.');
-      // setUploading(false);
+      setUploading(false);
     };
 
     xhr.send(formData);
@@ -60,6 +62,7 @@ const VideoImport = ({ className = '' }: { className?: string }) => {
           <Import
             onUpload={handleUpload}
             text="Upload the Video you want to Dub"
+            className={uploading ? 'pointer-events-none' : ''}
           />
         )}
       </div>
@@ -72,6 +75,37 @@ const VideoImport = ({ className = '' }: { className?: string }) => {
               )}
             >
               Delete
+            </button>
+            <button
+              className={cn(
+                'flex body-sm  justify-between items-center gap-1  px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
+              )}
+              onClick={() => {
+                const video = videoRef.current;
+                if (video) {
+                  if (video.paused) {
+                    video.play();
+                    setIsPlaying(true);
+                  } else {
+                    video.pause();
+                    setIsPlaying(false);
+                  }
+                }
+              }}
+            >
+              {isPlaying ? (
+                <Pause
+                  className="w-5 h-5 text-white"
+                  stroke="none"
+                  fill="currentColor"
+                />
+              ) : (
+                <Play
+                  className="w-5 h-5 text-white"
+                  stroke="none"
+                  fill="currentColor"
+                />
+              )}
             </button>
             <button
               className={cn(
@@ -114,13 +148,15 @@ export const Import = ({
   onUpload,
   text,
   themeClass = '',
+  className = '',
 }: {
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   text: string;
   themeClass?: string;
+  className?: string;
 }) => {
   return (
-    <div className={cn('flex-center flex-col h-full w-full')}>
+    <div className={cn('flex-center flex-col h-full w-full', className)}>
       {/* Import button */}
       <label className="mb-2">
         <input
