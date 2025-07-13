@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/utils/cn';
@@ -12,6 +12,7 @@ interface Dimensions {
 
 interface AudioTrackProps {
   height: number;
+  activeId?: number;
   classname?: string;
   clips: Array<{ width: number; x: number }>;
   onDragStop?: () => void;
@@ -24,8 +25,10 @@ interface AudioTrackProps {
 }
 
 // eslint-disable-next-line react/display-name
-const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(({ height, clips, classname }, ref) => {
+const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(({ height, activeId = 0, clips, classname }, ref) => {
   const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {}, [activeId]);
 
   return (
     <div className="w-full flex-center">
@@ -42,7 +45,14 @@ const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(({ height, clips,
         <div className="absolute top-1/2 left-0 w-full border-t border-gray-400" />
         {/* calculate x and width for each clip */}
         {clips.map((_, index) => (
-          <Clip id={index} key={index} height={height} clips={clips} />
+          // if activeid and not muted then highlight
+          <Clip
+            id={index}
+            key={index}
+            height={height}
+            clips={clips}
+            bgClass={!isMuted && activeId === index ? 'bg-svm-3' : 'bg-svm-2'}
+          />
         ))}
       </div>
     </div>
@@ -151,7 +161,12 @@ export const Clip = ({
       dragAxis="x"
       disableDragging={false}
       style={{}}
-      className={cn(' border-l-2 border-r-2  rounded-md text-center content-center min-h-[20px] min-w-0', bgClass, bgHoverClass, borderClass)}
+      className={cn(
+        ' border-l-2 border-r-2 rounded-md text-center content-center min-h-[20px] min-w-0',
+        bgClass,
+        bgHoverClass,
+        borderClass
+      )}
       onMouseEnter={() => {
         if (onMouseEnter) {
           onMouseEnter();

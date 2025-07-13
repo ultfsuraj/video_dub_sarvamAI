@@ -36,23 +36,23 @@ export const SCRIPTS: Array<ScriptType> = [
     text: 'The teacher explained the concept multiple times, but many students were still confused about how the formula actually works in practice.',
   },
   {
-    id: 4,
+    id: 3,
     text: 'Although he was tired from work, he still helped his daughter with her homework.',
   },
   {
-    id: 5,
+    id: 4,
     text: 'Even though the rain ruined most of the outdoor plans, everyone still had a great time playing games and sharing stories indoors with hot tea.',
   },
   {
-    id: 6,
+    id: 5,
     text: 'She packed her bags quietly, not wanting to disturb anyone in the early hours of morning.',
   },
   {
-    id: 7,
+    id: 6,
     text: 'She always keeps a journal by her bedside.',
   },
   {
-    id: 8,
+    id: 7,
     text: 'We decided to cancel the trip because of the unexpected weather conditions.',
   },
 ];
@@ -72,23 +72,23 @@ export const DUB_SCRIPTS: Array<ScriptType> = [
     text: 'अध्यापक ने यह अवधारणा कई बार समझाई, लेकिन कई छात्र अभी भी नहीं समझ पाए कि सूत्र वास्तव में कैसे काम करता है।',
   },
   {
-    id: 4,
+    id: 3,
     text: 'काम से थकने के बावजूद, उसने अपनी बेटी का होमवर्क करने में मदद की।',
   },
   {
-    id: 5,
+    id: 4,
     text: 'हालांकि बारिश ने अधिकतर बाहरी योजनाएं बिगाड़ दीं, फिर भी सभी ने अंदर खेल खेलकर और गर्म चाय के साथ कहानियां सुनाकर अच्छा समय बिताया।',
   },
   {
-    id: 6,
+    id: 5,
     text: 'उसने चुपचाप अपने बैग पैक किए, ताकि सुबह-सुबह किसी को परेशान न करे।',
   },
   {
-    id: 7,
+    id: 6,
     text: 'वह हमेशा अपने बिस्तर के पास एक डायरी रखती है।',
   },
   {
-    id: 8,
+    id: 7,
     text: 'हमने अप्रत्याशित मौसम की स्थिति के कारण यात्रा रद्द करने का निर्णय लिया।',
   },
 ];

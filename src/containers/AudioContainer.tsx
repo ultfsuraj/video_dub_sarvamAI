@@ -11,6 +11,7 @@ const AudioContainer = forwardRef<
   {
     clips: Array<ClipType>;
     dubClips: Array<ClipType>;
+    activeId: number;
     isFileUploaded: boolean;
     isAudioLoading: boolean;
     sliderValue?: number;
@@ -25,6 +26,7 @@ const AudioContainer = forwardRef<
     {
       clips,
       dubClips,
+      activeId,
       isFileUploaded,
       isAudioLoading,
       sliderValue = 0,
@@ -54,8 +56,8 @@ const AudioContainer = forwardRef<
           )}
         </div>
         <div className="flex-center flex-col gap-4 ">
-          <AudioTrack height={40} clips={dubClips} ref={dubAudioTrackRef} />
-          <AudioTrack height={40} clips={clips} classname="select-none pointer-events-none " />
+          <AudioTrack height={40} clips={dubClips} ref={dubAudioTrackRef} activeId={activeId} />
+          <AudioTrack height={40} clips={clips} classname="select-none pointer-events-none " activeId={-1} />
         </div>
       </div>
     );

@@ -29,9 +29,11 @@ const App = () => {
   const [dubClips, setDubClips] = useState<Array<ClipType>>([]);
   const [fileName, setFileName] = useState<string>('Unknown.mp4');
   const [sliderValue, setSliderValue] = useState<number>(0);
+  const [activeId, setActiveId] = useState<number>(-1);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const dubAudioTrackRef = useRef<HTMLDivElement>(null);
+  const textRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const uploadFlow = async () => {
     await delay(1000);
@@ -93,11 +95,13 @@ const App = () => {
       <div className="w-full h-[50vh] flex growjustify-between gap-2 ">
         {/* left half */}
         <TranscriptContainer
+          ref={textRefs}
           scripts={scripts}
           dubScripts={dubScripts}
           isFileUploaded={isFileUploaded}
           isTranscriptLoading={isTranscriptLoading}
           isTranslationLoading={isTranslationLoading}
+          activeId={activeId}
         />
         {/* right half */}
         <div className=" w-[38%] drop-shadow-lg rounded-md">
@@ -107,8 +111,25 @@ const App = () => {
             setFileName={(val) => setFileName(val)}
             onTimeUpdate={() => {
               const video = videoRef.current;
+
               if (video && video.duration) {
+                // set slide
                 setSliderValue((video.currentTime / video.duration) * 100);
+
+                // filter Dub audio clips to play and highlight
+                const dubAudio = dubAudioTrackRef.current;
+                let activeIndex = -1;
+                if (dubAudio) {
+                  const pos = (sliderValue / 100) * dubAudio.offsetWidth;
+                  for (let i = 0; i < dubClips.length; i++) {
+                    const { x, width } = dubClips[i];
+                    if (pos > x && pos < x + width) {
+                      activeIndex = i;
+                      break;
+                    }
+                  }
+                }
+                setActiveId(activeIndex);
               }
             }}
             className="h-full"
@@ -120,6 +141,7 @@ const App = () => {
         ref={dubAudioTrackRef}
         clips={clips}
         dubClips={dubClips}
+        activeId={activeId}
         isFileUploaded={isFileUploaded}
         isAudioLoading={isAudioLoading}
         sliderValue={sliderValue}
