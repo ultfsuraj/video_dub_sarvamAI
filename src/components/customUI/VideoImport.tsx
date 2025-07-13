@@ -62,7 +62,9 @@ const VideoImport = ({ className = '' }: { className?: string }) => {
           <Import
             onUpload={handleUpload}
             text="Upload the Video you want to Dub"
-            className={uploading ? 'pointer-events-none' : ''}
+            className={
+              uploading ? 'pointer-events-none text-center' : 'text-center'
+            }
           />
         )}
       </div>

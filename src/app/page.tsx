@@ -5,61 +5,44 @@ import { useEffect, useRef, useState } from 'react';
 import Slider from '@/components/customUI/Slider';
 import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
 import VideoImport from '@/components/customUI/VideoImport';
-import Text from '@/components/customUI/Text';
+import Transcript from '@/containers/Transcript';
 
 import { delay } from '@/utils/delay';
 import DropDown from '@/components/customUI/DropDown';
 import CustomLoader from '@/components/customUI/Loader';
+import { CLIPS, DUB_SCRIPTS, LANGUAGES, SCRIPTS } from '@/utils/constants';
 
-const clickDelay = async (val: string): Promise<void> => {
-  await delay(4000);
-  console.log(val);
-};
-
-const CLIPS: { width: number; x: number }[] = [
-  { width: 20, x: 5 },
-  { width: 80, x: 30 },
-  { width: 60, x: 120 },
-  { width: 20, x: 205 },
-  { width: 80, x: 230 },
-  { width: 60, x: 310 },
-  { width: 20, x: 400 },
-  { width: 80, x: 430 },
-];
-
-const languages: string[] = [
-  'Hindi',
-  'Marathi',
-  'Bangali',
-  'Telugu',
-  'Tamil',
-  'Kannada',
-  'Marwari',
-  'Odia',
-  'Punjabi',
-  'Gujarati',
-  'Malayalam',
-  'Assamese',
-  'Urdu',
-  'English',
-  'Bhojpuri',
-  'Haryanvi',
-  'Rajasthani',
-  'Konkani',
-  'Sindhi',
-  'Dogri',
-  'Santali',
-  'Kashmiri',
-  'Nepali',
-  'Manipuri',
-  'Bodo',
-];
+//  user flow
 
 const App = () => {
   const [isTranscriptLoading, setTranscriptLoading] = useState<boolean>(false);
   const [isTranslationLoading, setTranslationLoading] =
     useState<boolean>(false);
   const [isFileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [scripts, setScripts] = useState<Array<{ id: number; text: string }>>(
+    []
+  );
+  const [dubScripts, setDubScripts] = useState<
+    Array<{ id: number; text: string }>
+  >([]);
+
+  // simulate upload flow
+  const uploadFlow = async () => {
+    await delay(1000);
+    setFileUploaded(true);
+    setTranscriptLoading(true);
+    await delay(2000);
+    setScripts(SCRIPTS);
+    setTranscriptLoading(false);
+    setTranslationLoading(true);
+    await delay(2000);
+    setDubScripts(DUB_SCRIPTS);
+    setTranslationLoading(false);
+  };
+
+  useEffect(() => {
+    uploadFlow();
+  }, []);
 
   return (
     // main container
@@ -83,7 +66,7 @@ const App = () => {
         </div>
         <div className="w-[31%] flex-center">
           <DropDown
-            items={languages}
+            items={LANGUAGES}
             triggerClass="outline-none border-none h-6"
             dropdownContentClass="border border-svm-9 bg-slate-100"
           />
@@ -93,48 +76,13 @@ const App = () => {
       {/* middle */}
       <div className="w-full h-[50vh] flex growjustify-between gap-2 ">
         {/* left half */}
-        <div className="w-1/2 h-full flex flex-col justify-around grow drop-shadow-lg rounded-md invisible-scroll gap-2 p-x-2  ">
-          {!isFileUploaded ? (
-            <div className="flex justify-around  w-full grow gap-2">
-              <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
-                {isTranscriptLoading ? (
-                  <CustomLoader
-                    text="Loading..."
-                    spinnerClass="[animation-duration:1.5s]"
-                  />
-                ) : (
-                  ' Original Transcript'
-                )}
-              </div>
-              <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
-                {isTranslationLoading ? (
-                  <CustomLoader
-                    text="Translating..."
-                    spinnerClass="[animation-duration:1.5s]"
-                  />
-                ) : (
-                  'Dubbed Translation'
-                )}
-              </div>
-            </div>
-          ) : (
-            [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-              <div key={index} className="flex justify-around gap-2">
-                <Text text="lorem ipsum dolor sit amet, consectetur adipiscing elit.." />
-                <Text
-                  text={
-                    index == 2 ? 'loading...' : 'lorem ipsum dolor sit amet'
-                  }
-                  buttonProps={{
-                    btnText: 'Generate Audio',
-                    loadingTxt: 'Generating...',
-                    onClick: clickDelay,
-                  }}
-                />
-              </div>
-            ))
-          )}
-        </div>
+        <Transcript
+          scripts={scripts}
+          dubScripts={dubScripts}
+          isFileUploaded={isFileUploaded}
+          isTranscriptLoading={isTranscriptLoading}
+          isTranslationLoading={isTranslationLoading}
+        />
         {/* right half */}
         <div className=" w-[38%] drop-shadow-lg rounded-md">
           <VideoImport className="h-full" />
