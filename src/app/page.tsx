@@ -129,6 +129,7 @@ const App = () => {
                     }
                   }
                 }
+                // text highlighted based on activeindex
                 setActiveId(activeIndex);
               }
             }}
@@ -154,6 +155,20 @@ const App = () => {
           if (video && video.duration) {
             video.currentTime = (val / 100) * video.duration;
           }
+          const dubAudio = dubAudioTrackRef.current;
+          let activeIndex = -1;
+          if (dubAudio) {
+            const pos = (sliderValue / 100) * dubAudio.offsetWidth;
+            for (let i = 0; i < dubClips.length; i++) {
+              const { x, width } = dubClips[i];
+              if (pos > x && pos < x + width) {
+                activeIndex = i;
+                break;
+              }
+            }
+          }
+          // text highlighted based on activeindex
+          setActiveId(activeIndex);
         }}
       />
     </div>
