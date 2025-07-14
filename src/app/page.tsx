@@ -30,6 +30,7 @@ const App = () => {
   const [fileName, setFileName] = useState<string>('Unknown.mp4');
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [activeId, setActiveId] = useState<number>(-1);
+  const [dubLang, setDubLang] = useState<string>(LANGUAGES[0]);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const dubAudioTrackRef = useRef<HTMLDivElement>(null);
@@ -49,7 +50,7 @@ const App = () => {
     setTranslationLoading(true);
     setDubAudioLoading(true);
     await delay(2000);
-    setDubScripts(DUB_SCRIPTS);
+    setDubScripts(DUB_SCRIPTS[dubLang]);
     setTranslationLoading(false);
     await delay(800);
     setDubClips(DUB_CLIPS);
@@ -87,6 +88,14 @@ const App = () => {
             items={LANGUAGES}
             triggerClass="outline-none border-none h-6"
             dropdownContentClass="border border-svm-9 bg-neutral-50"
+            onSelect={(lang) => {
+              setDubLang(lang);
+              setTranslationLoading(true);
+              delay(2000).then(() => {
+                setTranslationLoading(false);
+                setDubScripts(DUB_SCRIPTS[lang]);
+              });
+            }}
           />
         </div>
         <div className="w-[38%] flex-center text-gray-600 text-center ">{fileName}</div>
