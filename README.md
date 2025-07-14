@@ -11,7 +11,7 @@ NO Video Processing Yet. Events are handeled to simulate UI change, processing w
 1. Responsive (landscape mode recommended)
 2. Upload video (try Videos in DemoVideos folder (short vertical, long horizontal))
 3. Wait for video to be processed (language detection , transcript loading , audio extraction , translation loading , dubbed audio loading)
-4. You can change dub language, drag dubbed audio clips or resize from ends. 
+4. You can change dub language, edit translated scripts and generate new dubbed audio for it, drag dubbed audio clips or resize from ends. 
 
 ## Run in Local
 
