@@ -9,8 +9,8 @@ Videos are uploaded to [Cloudinary](https://console.cloudinary.com/) account.
 NO Video Processing Yet. Events are handeled to simulate UI change, processing will be done later.
 
 1. Responsive (landscape mode recommended)
-2. Upload video
-3. Wait for video to be processed (language detaction , transcript loading , audio extraction , translation loading , dubbed audio loading)
+2. Upload video (try Videos in DemoVideos folder (short vertical, long horizontal))
+3. Wait for video to be processed (language detection , transcript loading , audio extraction , translation loading , dubbed audio loading)
 4. You can change dub language, drag and adjust dubbed audio clips
 
 ## Run in Local
@@ -30,7 +30,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## To Do
 
 1. Redux integration (app has grown enough, useState isn't seamless ) for better state management and reduced Rerenders
-2. SYNC slider, video, audio clips, dubbed texts, try using
+2. SYNC slider, video, audio clips, dubbed texts, try using these for frequent updates
 
    a. Observers
 
