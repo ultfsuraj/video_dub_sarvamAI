@@ -69,7 +69,7 @@ const Page = () => {
       </div>
       {/* AudioTrack Component */}
       <div className="border-1 bg-gray-100 border-black w-full px-4 py-6 ">
-        <AudioTrack height={40} clips={clips} ref={audioRef} />
+        <AudioTrack height={36} clips={clips} ref={audioRef} />
       </div>
       {/* Dropdown Component */}
       <div className="border-1 bg-gray-100 border-black w-full px-4 py-6">
@@ -96,14 +96,8 @@ function Parent() {
   return (
     <div className="w-full">
       <div className="w-full flex">
-        <SpeakerToggle height={40} />
-        <Slider
-          value={value}
-          onMouseUp={handleDrag}
-          min={0}
-          max={100}
-          step={0.5}
-        />
+        <SpeakerToggle height={36} />
+        <Slider value={value} onMouseUp={handleDrag} min={0} max={100} step={0.5} />
       </div>
       <button
         className="mt-4 text-sm bg-svm-9 text-white px-2 py-1 rounded hover:bg-svm-8"
