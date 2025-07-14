@@ -24,12 +24,7 @@ type AutoTextAreaProps = {
   className?: string;
 };
 
-const AutoTextArea: React.FC<AutoTextAreaProps> = ({
-  value,
-  onChange,
-  readOnly = false,
-  className = '',
-}) => {
+const AutoTextArea: React.FC<AutoTextAreaProps> = ({ value, onChange, readOnly = false, className = '' }) => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
@@ -57,21 +52,15 @@ const AutoTextArea: React.FC<AutoTextAreaProps> = ({
   );
 };
 
-const Text = ({
-  text,
-  className,
-  buttonProps,
-  btnClass = '',
-  btnContainerClass = '',
-}: TextProps) => {
+const Text = ({ text, className, buttonProps, btnClass = '', btnContainerClass = '' }: TextProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dubText, setDubText] = useState<string>(text);
   return (
     <div
       className={cn(
-        'px-2 py-1 w-full flex flex-col flex-center rounded-md border border-svm-7 bg-svm-1 drop-shadow-sm',
+        'px-2 py-1 w-full flex flex-col flex-center rounded-md border border-svm-7 bg-svm-1 hover:bg-white drop-shadow-sm',
         className,
-        isLoading ? 'select-none pointer-events-none' : ''
+        isLoading ? 'select-none pointer-events-none bg-white' : ''
       )}
     >
       <AutoTextArea

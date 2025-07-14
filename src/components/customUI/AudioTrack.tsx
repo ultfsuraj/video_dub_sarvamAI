@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/utils/cn';
@@ -12,6 +12,7 @@ interface Dimensions {
 
 interface AudioTrackProps {
   height: number;
+  activeId?: number;
   classname?: string;
   clips: Array<{ width: number; x: number }>;
   onDragStop?: () => void;
@@ -24,32 +25,39 @@ interface AudioTrackProps {
 }
 
 // eslint-disable-next-line react/display-name
-const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(
-  ({ height, clips, classname }, ref) => {
-    const [isMuted, setIsMuted] = useState(false);
+const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(({ height, activeId = 0, clips, classname }, ref) => {
+  const [isMuted, setIsMuted] = useState(false);
 
-    return (
-      <div className="w-full flex-center">
-        <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
-        <div
-          ref={ref}
-          className={cn(
-            'relative w-full border-l-1 border-r-1 rounded-md border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
-            isMuted ? 'opacity-60 pointer-events-none' : '',
-            classname
-          )}
-          style={{ height: `${height}px` }}
-        >
-          <div className="absolute top-1/2 left-0 w-full border-t border-gray-400" />
-          {/* calculate x and width for each clip */}
-          {clips.map((_, index) => (
-            <Clip id={index} key={index} height={height} clips={clips} />
-          ))}
-        </div>
+  useEffect(() => {}, [activeId]);
+
+  return (
+    <div className="w-full flex-center">
+      <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
+      <div
+        ref={ref}
+        className={cn(
+          'relative w-full border-l-1 border-r-1 rounded-md border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
+          isMuted ? 'opacity-60 pointer-events-none' : '',
+          classname
+        )}
+        style={{ height: `${height}px` }}
+      >
+        <div className="absolute top-1/2 left-0 w-full border-t border-gray-400" />
+        {/* calculate x and width for each clip */}
+        {clips.map((_, index) => (
+          // if activeid and not muted then highlight
+          <Clip
+            id={index}
+            key={index}
+            height={height}
+            clips={clips}
+            bgClass={!isMuted && activeId === index ? 'bg-svm-3' : 'bg-svm-2'}
+          />
+        ))}
       </div>
-    );
-  }
-);
+    </div>
+  );
+});
 
 // Clip component that represents the draggable and resizable audio track
 
@@ -121,13 +129,7 @@ export const Clip = ({
     }
   };
 
-  const handleResizeStop: RndResizeCallback = (
-    e,
-    direction,
-    ref,
-    delta,
-    position
-  ) => {
+  const handleResizeStop: RndResizeCallback = (e, direction, ref, delta, position) => {
     const bounds = getBounds(clips, id, position.x, ref.offsetWidth, false);
 
     setDimensions({
@@ -160,7 +162,7 @@ export const Clip = ({
       disableDragging={false}
       style={{}}
       className={cn(
-        ' border-l-2 border-r-2  rounded-md text-center content-center min-h-[20px] min-w-0',
+        ' border-l-2 border-r-2 rounded-md text-center content-center min-h-[20px] min-w-0',
         bgClass,
         bgHoverClass,
         borderClass
@@ -188,12 +190,7 @@ interface SpeakerToggleProps {
   onClick?: () => void;
 }
 
-export const SpeakerToggle = ({
-  height,
-  color = 'text-svm-9',
-  className,
-  onClick,
-}: SpeakerToggleProps) => {
+export const SpeakerToggle = ({ height, color = 'text-svm-9', className, onClick }: SpeakerToggleProps) => {
   const [isMuted, setIsMuted] = useState(false);
 
   return (
@@ -208,15 +205,9 @@ export const SpeakerToggle = ({
       aria-label={isMuted ? 'Unmute' : 'Mute'}
     >
       {isMuted ? (
-        <VolumeX
-          className={cn(color)}
-          style={{ height: `${0.6 * height}px`, width: `${0.6 * height}px` }}
-        />
+        <VolumeX className={cn(color)} style={{ height: `${0.6 * height}px`, width: `${0.6 * height}px` }} />
       ) : (
-        <Volume2
-          className={cn(color)}
-          style={{ height: `${0.6 * height}px`, width: `${0.6 * height}px` }}
-        />
+        <Volume2 className={cn(color)} style={{ height: `${0.6 * height}px`, width: `${0.6 * height}px` }} />
       )}
     </button>
   );

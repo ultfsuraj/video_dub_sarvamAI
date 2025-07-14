@@ -1,93 +1,149 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import { useState, useRef, forwardRef } from 'react';
+import { Pause, Play } from 'lucide-react';
+import { useState, forwardRef } from 'react';
 
-const VideoImport = ({ className = '' }: { className?: string }) => {
-  const [progress, setProgress] = useState(0);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  // const [uploading, setUploading] = useState(false);
-  // const [fileName, setFileName] = useState('');
+interface VideoImportProps {
+  className?: string;
+  setFileImported: (x: boolean) => void;
+  setFileName: (x: string) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTimeUpdate?: () => void;
+}
 
-  const videoRef = useRef<HTMLVideoElement>(null);
+// eslint-disable-next-line react/display-name
+const VideoImport = forwardRef<HTMLVideoElement, VideoImportProps>(
+  ({ className = '', setFileImported, setFileName, onPlay, onPause, onTimeUpdate }, videoRef) => {
+    const [progress, setProgress] = useState(0);
+    const [videoUrl, setVideoUrl] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setProgress(0);
-    // setUploading(true);
-    // setFileName(file.name);
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/upload', true);
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const percent = Math.round((event.loaded / event.total) * 100);
-        setProgress(percent);
+    const handlePlay = () => {
+      if (onPlay) {
+        onPlay();
       }
+      setIsPlaying(true);
     };
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const res = JSON.parse(xhr.responseText);
-        const uploadedPath = `/uploads/${res.file}`;
-        setVideoUrl(uploadedPath);
-      } else {
-        alert('❌ Upload failed.');
+    const handlePause = () => {
+      if (onPause) {
+        onPause();
       }
-      // setUploading(false);
+      setIsPlaying(false);
     };
 
-    xhr.onerror = () => {
-      alert('❌ Upload error.');
-      // setUploading(false);
+    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      setProgress(0);
+      setUploading(true);
+      setFileName(file.name);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/upload', true);
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          setProgress(percent);
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          const uploadedPath = `/uploads/${res.file}`;
+          setVideoUrl(uploadedPath);
+        } else {
+          alert('❌ Upload failed.');
+        }
+        setUploading(false);
+        setFileImported(true);
+      };
+
+      xhr.onerror = () => {
+        alert('❌ Upload error.');
+        setUploading(false);
+        setFileImported(true);
+      };
+
+      xhr.send(formData);
     };
 
-    xhr.send(formData);
-  };
-
-  return (
-    <div className={cn('w-full h-[50vh] flex flex-col ', className)}>
-      <div className="grow flex-center">
-        {videoUrl ? (
-          <Video ref={videoRef} src={videoUrl} />
-        ) : (
-          <Import
-            onUpload={handleUpload}
-            text="Upload the Video you want to Dub"
-          />
-        )}
+    return (
+      <div className={cn('w-full h-[50vh] flex flex-col ', className)}>
+        <div className="grow flex-center">
+          {videoUrl ? (
+            <Video
+              ref={videoRef}
+              src={videoUrl}
+              onPlay={handlePlay}
+              onPause={handlePause}
+              onTimeUpdate={onTimeUpdate}
+            />
+          ) : (
+            <Import
+              onUpload={handleUpload}
+              text="Upload the Video you want to Dub"
+              className={uploading ? 'pointer-events-none text-center' : 'text-center'}
+            />
+          )}
+        </div>
+        <div className="h-8">
+          {videoUrl ? (
+            <div className="caption text-center content-center flex justify-between">
+              <button
+                className={cn(
+                  'flex body-sm justify-between items-center gap-1 px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
+                )}
+              >
+                Delete
+              </button>
+              <button
+                className={cn(
+                  'flex body-sm  justify-between items-center gap-1  px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
+                )}
+                onClick={() => {
+                  const video = videoRef?.current;
+                  if (video) {
+                    if (video.paused) {
+                      video.play();
+                      setIsPlaying(true);
+                    } else {
+                      video.pause();
+                      setIsPlaying(false);
+                    }
+                  }
+                }}
+              >
+                {isPlaying ? (
+                  <Pause className="w-5 h-5 text-white" stroke="none" fill="currentColor" />
+                ) : (
+                  <Play className="w-5 h-5 text-white" stroke="none" fill="currentColor" />
+                )}
+              </button>
+              <button
+                className={cn(
+                  'flex body-sm  justify-between items-center gap-1  px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
+                )}
+              >
+                Export
+              </button>
+            </div>
+          ) : (
+            <ProgressBar progress={progress} bgClass="h-8" />
+          )}
+        </div>
       </div>
-      <div className="h-8">
-        {videoUrl ? (
-          <div className="caption text-center content-center flex justify-between">
-            <button
-              className={cn(
-                'flex body-sm justify-between items-center gap-1 px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
-              )}
-            >
-              Delete
-            </button>
-            <button
-              className={cn(
-                'flex body-sm  justify-between items-center gap-1  px-3 py-1 rounded text-white bg-svm-9 hover:bg-svm-8 outline-none'
-              )}
-            >
-              Export
-            </button>
-          </div>
-        ) : (
-          <ProgressBar progress={progress} bgClass="h-8" />
-        )}
-      </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export const ProgressBar = ({
   progress,
@@ -99,13 +155,8 @@ export const ProgressBar = ({
   barClass?: string;
 }) => {
   return (
-    <div
-      className={cn('w-full bg-svm-2 h-4 rounded-sm overflow-hidden', bgClass)}
-    >
-      <div
-        className={cn('h-full bg-svm-8 transition-all', barClass)}
-        style={{ width: `${progress}%` }}
-      />
+    <div className={cn('w-full bg-svm-2 h-4 rounded-sm overflow-hidden', bgClass)}>
+      <div className={cn('h-full bg-svm-8 transition-all', barClass)} style={{ width: `${progress}%` }} />
     </div>
   );
 };
@@ -114,21 +165,18 @@ export const Import = ({
   onUpload,
   text,
   themeClass = '',
+  className = '',
 }: {
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   text: string;
   themeClass?: string;
+  className?: string;
 }) => {
   return (
-    <div className={cn('flex-center flex-col h-full w-full')}>
+    <div className={cn('flex-center flex-col h-full w-full', className)}>
       {/* Import button */}
       <label className="mb-2">
-        <input
-          type="file"
-          accept="video/*"
-          className="hidden"
-          onChange={onUpload}
-        />
+        <input type="file" accept="video/*" className="hidden" onChange={onUpload} />
         {/* Circle with plus icon */}
         <div
           className={cn(
@@ -148,11 +196,14 @@ export const Import = ({
 interface VideoProps {
   className?: string;
   src: string;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onTimeUpdate?: () => void;
 }
 
 // eslint-disable-next-line react/display-name
 export const Video = forwardRef<HTMLVideoElement, VideoProps>(
-  ({ className = '', src }, videoRef) => {
+  ({ className = '', src, onPlay, onPause, onTimeUpdate }, videoRef) => {
     return (
       <video
         ref={videoRef}
@@ -169,6 +220,9 @@ export const Video = forwardRef<HTMLVideoElement, VideoProps>(
             }
           }
         }}
+        onPlay={onPlay}
+        onPause={onPause}
+        onTimeUpdate={onTimeUpdate}
         className={cn('w-full aspect-video', className)}
       />
     );

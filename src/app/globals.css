@@ -1,9 +1,21 @@
 /* globals.css */
-@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
 
 /* Add global base styles */
 @layer base {
+  @media (max-width: 992px) {
+    html {
+      font-size: calc(100% - 4px);
+    }
+    * {
+      padding-top: max(0px, calc(var(--padding-top, 0px) - 4px));
+      padding-right: max(0px, calc(var(--padding-right, 0px) - 4px));
+      padding-bottom: max(0px, calc(var(--padding-bottom, 0px) - 4px));
+      padding-left: max(0px, calc(var(--padding-left, 0px) - 4px));
+    }
+  }
+
   body {
     @apply min-h-screen w-full m-0;
     font-family: 'Inter', sans-serif;
@@ -93,6 +105,12 @@
 @layer utilities {
   .flex-center {
     @apply flex justify-center items-center;
+  }
+
+  .invisible-scroll {
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 
