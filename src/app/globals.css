@@ -19,12 +19,12 @@
   body {
     @apply min-h-screen w-full m-0;
     font-family: 'Inter', sans-serif;
-    background-image: url('/left-gradient.svg'), url('/right-gradient.svg');
+    /* background-image: url('/left-gradient.svg'), url('/right-gradient.svg');
     background-repeat: no-repeat, no-repeat;
     background-position:
       left top,
       right top;
-    background-size: cover, cover;
+    background-size: cover, cover; */
     user-select: none;
   }
   body > div {
