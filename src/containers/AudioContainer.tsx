@@ -41,7 +41,7 @@ const AudioContainer = forwardRef<
     return (
       <div className="w-full h-[28vh] flex flex-col justify-center gap-6">
         <div className="w-full flex">
-          <SpeakerToggle height={40} className="invisible pointer-events-none" />
+          <SpeakerToggle height={36} className="invisible pointer-events-none" />
           {isFileUploaded && !isAudioLoading ? (
             <Slider
               value={sliderValue}
@@ -56,8 +56,8 @@ const AudioContainer = forwardRef<
           )}
         </div>
         <div className="flex-center flex-col gap-4 ">
-          <AudioTrack height={40} clips={dubClips} ref={dubAudioTrackRef} activeId={activeId} />
-          <AudioTrack height={40} clips={clips} classname="select-none pointer-events-none " activeId={-1} />
+          <AudioTrack height={36} clips={dubClips} ref={dubAudioTrackRef} activeId={activeId} />
+          <AudioTrack height={36} clips={clips} classname="select-none pointer-events-none " activeId={-1} />
         </div>
       </div>
     );
