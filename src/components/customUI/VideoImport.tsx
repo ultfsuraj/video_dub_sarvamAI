@@ -63,6 +63,7 @@ const VideoImport = forwardRef<HTMLVideoElement, VideoImportProps>(
           setVideoUrl(res.secure_url);
         } else {
           alert('❌ Upload failed.');
+          window.location.reload();
         }
         setUploading(false);
         setFileImported(true);
