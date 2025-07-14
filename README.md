@@ -37,7 +37,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    b. RequestAnimationFrame
 
 3. IndexDB for storing audio clips & user updates on different dubbed languages (localStorage limit 5-10 MB)
-4. backend apis + ZOD validations for audio processing, generation, translation, trimming, speed
-5. Zoom on Audio Clips for precise control over editing
-6. Worst usecases for performance bottlenecks
-7. Authentication
+4. UI update / code cleanup
+5. backend apis + ZOD validations for audio processing, generation, translation, trimming, speed
+6. Zoom on Audio Clips for precise control over editing
+7. Worst usecases for performance bottlenecks
+8. Authentication
