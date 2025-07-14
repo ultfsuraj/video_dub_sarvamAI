@@ -44,9 +44,10 @@ const VideoImport = forwardRef<HTMLVideoElement, VideoImportProps>(
 
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('upload_preset', 'sarvamAI');
 
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/api/upload', true);
+      xhr.open('POST', 'https://api.cloudinary.com/v1_1/dk0zrgo5i/video/upload', true);
 
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -58,8 +59,8 @@ const VideoImport = forwardRef<HTMLVideoElement, VideoImportProps>(
       xhr.onload = () => {
         if (xhr.status === 200) {
           const res = JSON.parse(xhr.responseText);
-          const uploadedPath = `/uploads/${res.file}`;
-          setVideoUrl(uploadedPath);
+          console.log(res.secure_url);
+          setVideoUrl(res.secure_url);
         } else {
           alert('❌ Upload failed.');
         }
