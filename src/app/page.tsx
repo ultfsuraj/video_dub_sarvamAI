@@ -64,7 +64,7 @@ const App = () => {
 
   return (
     // main container
-    <div className="h-[100vh] w-[100vw] px-10 py-2 flex-center flex-col gap-2 bg-neutral-50">
+    <div className="h-[100vh] w-[100vw] px-10 py-2 flex-center flex-col gap-2 bg-neutral-50 text-center">
       <div className="w-full flex-center h-10 flex heading-xl pt-6 pb-14 text-svm-10 ">
         Sarvam AI : Video Dubbing Tool
       </div>
