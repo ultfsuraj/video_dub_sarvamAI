@@ -19,7 +19,7 @@ const AudioContainer = forwardRef<
     sliderMax?: number;
     sliderStep?: number;
     onMouseUp: (x: number) => void;
-    setSliderValue: (val: number) => void;
+    // onValueChange: (x: number) => void;
   }
 >(
   (
@@ -33,8 +33,8 @@ const AudioContainer = forwardRef<
       sliderMin = 0,
       sliderMax = 100,
       sliderStep = 0.001,
-      setSliderValue,
       onMouseUp,
+      // onValueChange,
     },
     dubAudioTrackRef
   ) => {
@@ -45,8 +45,8 @@ const AudioContainer = forwardRef<
           {isFileUploaded && !isAudioLoading ? (
             <Slider
               value={sliderValue}
-              setSliderValue={setSliderValue}
               onMouseUp={onMouseUp}
+              // onValueChange={onValueChange}
               min={sliderMin}
               max={sliderMax}
               step={sliderStep}

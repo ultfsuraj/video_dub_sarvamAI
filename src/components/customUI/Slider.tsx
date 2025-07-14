@@ -2,11 +2,12 @@
 
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { cn } from '@/utils/cn';
+import { useEffect, useRef, useState } from 'react';
 
 type SliderProps = {
   value: number;
-  setSliderValue: (val: number) => void;
   onMouseUp?: (value: number) => void;
+  // onValueChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -19,8 +20,8 @@ type SliderProps = {
 
 const Slider: React.FC<SliderProps> = ({
   value,
-  setSliderValue,
   onMouseUp,
+  // onValueChange,
   min = 0,
   max = 100,
   step = 1,
@@ -29,13 +30,25 @@ const Slider: React.FC<SliderProps> = ({
   bgRangeClass = 'bg-svm-8',
   bgThumbClass = 'bg-slate-600 hover:bg-slate-900',
 }) => {
+  const [internalValue, setInternalValue] = useState<number>(value);
+  const internalValueRef = useRef<number>(value);
+
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
+
   const handleValueChange = (val: number[]) => {
-    setSliderValue(val[0]);
+    setInternalValue(val[0]);
+    internalValueRef.current = val[0];
+    // if (onValueChange) {
+    //   onValueChange(val[0]);
+    // }
   };
 
   const handlePointerUp = () => {
+    console.log('mouse up');
     if (onMouseUp) {
-      onMouseUp(value);
+      onMouseUp(internalValueRef.current);
     }
   };
 
@@ -45,7 +58,7 @@ const Slider: React.FC<SliderProps> = ({
       min={min}
       max={max}
       step={step}
-      value={[value]}
+      value={[internalValue]}
       onValueChange={handleValueChange}
       onPointerUp={handlePointerUp}
     >

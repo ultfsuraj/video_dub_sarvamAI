@@ -146,11 +146,9 @@ const App = () => {
         isFileUploaded={isFileUploaded}
         isAudioLoading={isAudioLoading}
         sliderValue={sliderValue}
-        setSliderValue={(val) => {
-          setSliderValue(val);
-        }}
         onMouseUp={(val: number) => {
           console.log('slider', val);
+          setSliderValue(val);
           const video = videoRef.current;
           if (video && video.duration) {
             video.currentTime = (val / 100) * video.duration;
@@ -170,6 +168,9 @@ const App = () => {
           // text highlighted based on activeindex
           setActiveId(activeIndex);
         }}
+        // onValueChange={(val) => {
+        //   setSliderValue(val);
+        // }}
       />
     </div>
   );
