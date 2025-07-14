@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Demo Video Dubbing Tool
 
-## Getting Started
+### Deployed Link [Sarvam AI Video Dubbing Tool](https://video-dub-sarvam-ai.vercel.app/)
 
-First, run the development server:
+This is a demo web app to simulate video dubbing from one language to another.
+
+Videos are uploaded to [Cloudinary](https://console.cloudinary.com/) account.
+
+NO Video Processing Yet. Events are handeled to simulate UI change, processing will be done later.
+
+1. Responsive (landscape mode recommended)
+2. Upload video
+3. Wait for video to be processed (language detaction , transcript loading , audio extraction , translation loading , dubbed audio loading)
+4. You can change dub language, drag and adjust dubbed audio clips
+
+## Run in Local
 
 ```bash
+# clone this repo
+#
+# go to project root directory
+
+npm install
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## To Do
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Redux integration (app has grown enough, useState isn't seamless ) for better state management and reduced Rerenders
+2. SYNC slider, video, audio clips, dubbed texts, try using
 
-## Learn More
+   a. Observers
 
-To learn more about Next.js, take a look at the following resources:
+   b. RequestAnimationFrame
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. IndexDB for storing audio clips & user updates on different dubbed languages (localStorage limit 5-10 MB)
+4. backend apis + ZOD validations for audio processing, generation, translation, trimming, speed
+5. Zoom on Audio Clips for precise control over editing
+6. Worst usecases for performance bottlenecks
+7. Authentication
