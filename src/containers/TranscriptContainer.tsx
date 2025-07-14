@@ -42,7 +42,7 @@ const TranscriptContainer = ({
 
   return (
     <div className="w-1/2 h-full flex flex-col justify-around grow drop-shadow-lg rounded-md invisible-scroll gap-2 p-x-2  ">
-      {!isFileUploaded && !isTranscriptLoading && !isTranslationLoading ? (
+      {!isFileUploaded ? (
         <div className="flex justify-around  w-full grow gap-2">
           <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
             Original Transcript
