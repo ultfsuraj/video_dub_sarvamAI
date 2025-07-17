@@ -5,66 +5,67 @@ import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
-interface Dimensions {
+export type Dimensions = {
   width: number;
   x: number;
-}
+};
 
-interface AudioTrackProps {
+export type AudioTrackProps = {
   height: number;
   activeId?: number;
   classname?: string;
   clips: Array<{ width: number; x: number }>;
-  onDragStop?: () => void;
-  onResizeStop?: () => void;
+  onDragStop?: (id: number, dimentions: Dimensions) => void;
+  onResizeStop?: (id: number, dimentions: Dimensions) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   bgClass?: string;
   bgHoverClass?: string;
   borderClass?: string;
-}
+};
 
 // eslint-disable-next-line react/display-name
-const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(({ height, activeId = 0, clips, classname }, ref) => {
-  const [isMuted, setIsMuted] = useState(false);
+const AudioTrack = forwardRef<HTMLDivElement, AudioTrackProps>(
+  ({ height, activeId = 0, clips, classname, onDragStop, onResizeStop }, ref) => {
+    const [isMuted, setIsMuted] = useState(false);
 
-  useEffect(() => {}, [activeId]);
+    useEffect(() => {}, [activeId]);
 
-  return (
-    <div className="w-full flex-center">
-      <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
-      <div
-        ref={ref}
-        className={cn(
-          'relative w-full border-l-1 border-r-1 rounded-md border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
-          isMuted ? 'opacity-60 pointer-events-none' : '',
-          classname
-        )}
-        style={{ height: `${height}px` }}
-      >
-        <div className="absolute top-1/2 left-0 w-full border-t border-gray-400" />
-        {/* calculate x and width for each clip */}
-        {clips.map((_, index) => (
-          // if activeid and not muted then highlight
-          <Clip
-            id={index}
-            key={index}
-            height={height}
-            clips={clips}
-            bgClass={!isMuted && activeId === index ? 'bg-svm-3' : 'bg-svm-2'}
-          />
-        ))}
+    return (
+      <div className="w-full flex-center">
+        <SpeakerToggle height={height} onClick={() => setIsMuted(!isMuted)} />
+        <div
+          ref={ref}
+          className={cn(
+            'relative w-full border-l-1 border-r-1 rounded-md border-gray-400 relative overflow-hidden p-2 min-h-[20px]',
+            isMuted ? 'opacity-60 pointer-events-none' : '',
+            classname
+          )}
+          style={{ height: `${height}px` }}
+        >
+          <div className="absolute top-1/2 left-0 w-full border-t border-gray-400" />
+          {/* calculate x and width for each clip */}
+          {clips.map((_, index) => (
+            // if activeid and not muted then highlight
+            <Clip
+              id={index}
+              key={index}
+              height={height}
+              clips={clips}
+              bgClass={!isMuted && activeId === index ? 'bg-svm-3' : 'bg-svm-2'}
+              onDragStop={onDragStop}
+              onResizeStop={onResizeStop}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 // Clip component that represents the draggable and resizable audio track
 
-interface ClipProps extends AudioTrackProps {
-  id: number;
-}
-
+export type ClipProps = { id: number } & AudioTrackProps;
 // return new x and width of clip
 function getBounds(
   clips: Array<{ width: number; x: number }>,
@@ -97,10 +98,11 @@ function getBounds(
     }
   }
 
-  clips[id].x = left;
-  clips[id].width = right - left + 1;
+  // clips[id].x = left;
+  // clips[id].width = right - left + 1;
 
-  return clips[id];
+  // return clips[id];
+  return { x: left, width: right - left + 1 };
 }
 
 export const Clip = ({
@@ -125,7 +127,7 @@ export const Clip = ({
 
     setDimensions((prev) => ({ ...prev, x: bounds.x }));
     if (onDragStop) {
-      onDragStop();
+      onDragStop(id, bounds);
     }
   };
 
@@ -137,7 +139,7 @@ export const Clip = ({
       x: bounds.x,
     });
     if (onResizeStop) {
-      onResizeStop();
+      onResizeStop(id, bounds);
     }
   };
 

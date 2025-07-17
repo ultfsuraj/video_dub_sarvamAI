@@ -1,19 +1,17 @@
 'use client';
 
-import AudioTrack, { SpeakerToggle } from '@/components/customUI/AudioTrack';
+import AudioTrack, { Dimensions, SpeakerToggle } from '@/components/customUI/AudioTrack';
 import Slider from '@/components/customUI/Slider';
-import type { ClipType } from '@/utils/constants';
-import { forwardRef } from 'react';
+import { updateDubClip } from '@/redux/features/appSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { forwardRef, useEffect } from 'react';
 
 // eslint-disable-next-line react/display-name
 const AudioContainer = forwardRef<
   HTMLDivElement,
   {
-    clips: Array<ClipType>;
-    dubClips: Array<ClipType>;
     activeId: number;
     isFileUploaded: boolean;
-    isAudioLoading: boolean;
     sliderValue?: number;
     sliderMin?: number;
     sliderMax?: number;
@@ -24,11 +22,9 @@ const AudioContainer = forwardRef<
 >(
   (
     {
-      clips,
-      dubClips,
       activeId,
       isFileUploaded,
-      isAudioLoading,
+
       sliderValue = 0,
       sliderMin = 0,
       sliderMax = 100,
@@ -38,6 +34,19 @@ const AudioContainer = forwardRef<
     },
     dubAudioTrackRef
   ) => {
+    const dispatch = useAppDispatch();
+    const isAudioLoading = useAppSelector((state) => state.appState.isAudioLoading);
+    const clips = useAppSelector((state) => state.appState.clips);
+    const dubClips = useAppSelector((state) => state.appState.dubClips);
+
+    const updateClip = (index: number, dimensions: Dimensions) => {
+      dispatch(updateDubClip({ index, dimensions }));
+    };
+
+    useEffect(() => {
+      console.log('dub', dubClips);
+    }, [dubClips]);
+
     return (
       <div className="w-full h-[28vh] flex flex-col justify-center gap-6">
         <div className="w-full flex">
@@ -56,7 +65,14 @@ const AudioContainer = forwardRef<
           )}
         </div>
         <div className="flex-center flex-col gap-4 ">
-          <AudioTrack height={36} clips={dubClips} ref={dubAudioTrackRef} activeId={activeId} />
+          <AudioTrack
+            height={36}
+            clips={dubClips}
+            ref={dubAudioTrackRef}
+            activeId={activeId}
+            onDragStop={updateClip}
+            onResizeStop={updateClip}
+          />
           <AudioTrack height={36} clips={clips} classname="select-none pointer-events-none " activeId={-1} />
         </div>
       </div>

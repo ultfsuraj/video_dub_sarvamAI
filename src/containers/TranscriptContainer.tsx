@@ -4,29 +4,20 @@ import { delay } from '@/utils/delay';
 
 import Text from '@/components/customUI/Text';
 import CustomLoader from '@/components/customUI/Loader';
-import { ScriptType } from '@/utils/constants';
 import { useEffect, useRef } from 'react';
+import { useAppSelector } from '@/redux/hooks';
 
 const clickDelay = async (val: string): Promise<void> => {
   await delay(2000);
   console.log(val);
 };
 
-const TranscriptContainer = ({
-  scripts,
-  dubScripts,
-  activeId = 0,
-  isFileUploaded,
-  isTranscriptLoading,
-  isTranslationLoading,
-}: {
-  scripts: Array<ScriptType>;
-  dubScripts: Array<ScriptType>;
-  activeId?: number;
-  isFileUploaded: boolean;
-  isTranscriptLoading: boolean;
-  isTranslationLoading: boolean;
-}) => {
+const TranscriptContainer = ({ activeId = 0, isFileUploaded }: { activeId?: number; isFileUploaded: boolean }) => {
+  const isScriptLoading = useAppSelector((state) => state.appState.isScriptLoading);
+  const scripts = useAppSelector((state) => state.appState.scripts);
+  const isTranslationLoading = useAppSelector((state) => state.appState.isTranslationLoading);
+  const dubScripts = useAppSelector((state) => state.appState.dubScripts);
+
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -53,7 +44,7 @@ const TranscriptContainer = ({
         </div>
       ) : null}
 
-      {isFileUploaded && isTranscriptLoading && !isTranslationLoading ? (
+      {isFileUploaded && isScriptLoading ? (
         <div className="flex justify-around  w-full grow gap-2">
           <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center caption">
             <CustomLoader text="Loading..." spinnerClass="[animation-duration:1.5s]" />
@@ -64,20 +55,21 @@ const TranscriptContainer = ({
         </div>
       ) : null}
 
-      {isFileUploaded && !isTranscriptLoading && isTranslationLoading ? (
+      {isFileUploaded && !isScriptLoading && isTranslationLoading ? (
         <div className="flex justify-around  w-full grow gap-2">
-          <div className="rounded-md w-1/2 text-gray-700 flex justify-around flex-col gap-2 ">
+          <div className="rounded-md w-1/2 text-gray-700 flex justify-around flex-col gap-2 max-h-[50vh]">
             {scripts.map(({ id, text }) => (
               <Text key={id} text={text} />
             ))}
           </div>
+
           <div className="border border-svm-8 rounded-md w-1/2 text-gray-700 flex-center max-h-[50vh] caption">
             <CustomLoader text="Translating..." spinnerClass="[animation-duration:1.5s]" />
           </div>
         </div>
       ) : null}
 
-      {isFileUploaded && !isTranslationLoading && !isTranslationLoading
+      {isFileUploaded && !isScriptLoading && !isTranslationLoading
         ? scripts.map(({ id, text }, index) => (
             <div key={id} className="flex justify-around gap-2" ref={(el) => (textRefs.current[index] = el)}>
               <Text text={text} />
