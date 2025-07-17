@@ -52,7 +52,7 @@ const VideoImport = forwardRef<HTMLVideoElement, VideoImportProps>(
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percent = Math.round((event.loaded / event.total) * 100);
-          setProgress(percent);
+          setProgress(percent - 1);
         }
       };
 
@@ -72,7 +72,7 @@ const VideoImport = forwardRef<HTMLVideoElement, VideoImportProps>(
       xhr.onerror = () => {
         alert('❌ Upload error.');
         setUploading(false);
-        setFileImported(true);
+        setFileImported(false);
       };
 
       xhr.send(formData);

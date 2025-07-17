@@ -12,19 +12,20 @@ import { SCRIPT_CLIPS, DUB_CLIPS, DUB_SCRIPTS, LANGUAGES, SCRIPTS } from '@/util
 
 import type { ClipType, ScriptType } from '@/utils/constants';
 import AudioContainer from '@/containers/AudioContainer';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { fetchDubScripts, fetchScripts } from '@/redux/features/appSlice';
 
 //  user flow
 
 const App = () => {
-  const [isTranscriptLoading, setTranscriptLoading] = useState<boolean>(false);
-  const [isTranslationLoading, setTranslationLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const isScriptLoading = useAppSelector((state) => state.appState.isScriptLoading);
+
   const [isAudioLoading, setAudioLoading] = useState<boolean>(false);
   const [isDubAudioLoading, setDubAudioLoading] = useState<boolean>(false);
   const [isFileImported, setFileImported] = useState<boolean>(false);
 
-  const [isFileUploaded, setFileUploaded] = useState<boolean>(false);
-  const [scripts, setScripts] = useState<Array<ScriptType>>([]);
-  const [dubScripts, setDubScripts] = useState<Array<ScriptType>>([]);
   const [clips, setClips] = useState<Array<ClipType>>([]);
   const [dubClips, setDubClips] = useState<Array<ClipType>>([]);
   const [fileName, setFileName] = useState<string>('Unknown.mp4');
@@ -37,22 +38,16 @@ const App = () => {
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const uploadFlow = async () => {
-    await delay(1000);
-    setFileUploaded(true);
-    setTranscriptLoading(true);
+    dispatch(fetchScripts());
+    dispatch(fetchDubScripts(dubLang));
+
     setAudioLoading(true);
     await delay(2000);
     setClips(SCRIPT_CLIPS);
     setAudioLoading(false);
-    await delay(700);
-    setScripts(SCRIPTS);
-    setTranscriptLoading(false);
-    setTranslationLoading(true);
-    setDubAudioLoading(true);
+
     await delay(2000);
-    setDubScripts(DUB_SCRIPTS[dubLang]);
-    setTranslationLoading(false);
-    await delay(800);
+
     setDubClips(DUB_CLIPS);
     setDubAudioLoading(false);
   };
@@ -73,7 +68,7 @@ const App = () => {
       {/* top */}
       <div className="w-full h-10 flex body-strong">
         <div className="w-[31%] flex-center ">
-          {isTranscriptLoading ? (
+          {isScriptLoading ? (
             <CustomLoader
               text="Detecting Language..."
               spinnerClass="[animation-duration:1.5s]"
@@ -90,11 +85,7 @@ const App = () => {
             dropdownContentClass="border border-svm-9 bg-neutral-50"
             onSelect={(lang) => {
               setDubLang(lang);
-              setTranslationLoading(true);
-              delay(2000).then(() => {
-                setTranslationLoading(false);
-                setDubScripts(DUB_SCRIPTS[lang]);
-              });
+              dispatch(fetchDubScripts(lang));
             }}
           />
         </div>
@@ -103,15 +94,7 @@ const App = () => {
       {/* middle */}
       <div className="w-full h-[50vh] flex growjustify-between gap-2 ">
         {/* left half */}
-        <TranscriptContainer
-          ref={textRefs}
-          scripts={scripts}
-          dubScripts={dubScripts}
-          isFileUploaded={isFileUploaded}
-          isTranscriptLoading={isTranscriptLoading}
-          isTranslationLoading={isTranslationLoading}
-          activeId={activeId}
-        />
+        <TranscriptContainer ref={textRefs} isFileUploaded={isFileImported} activeId={activeId} />
         {/* right half */}
         <div className=" w-[38%] drop-shadow-lg rounded-md">
           <VideoImport
@@ -152,7 +135,7 @@ const App = () => {
         clips={clips}
         dubClips={dubClips}
         activeId={activeId}
-        isFileUploaded={isFileUploaded}
+        isFileUploaded={isFileImported}
         isAudioLoading={isAudioLoading}
         sliderValue={sliderValue}
         onMouseUp={(val: number) => {

@@ -1,13 +1,3 @@
-export type ScriptType = {
-  id: number;
-  text: string;
-};
-
-export type ClipType = {
-  width: number;
-  x: number;
-};
-
 export const DUB_CLIPS: Array<ClipType> = [
   { width: 20, x: 5 },
   { width: 80, x: 30 },
