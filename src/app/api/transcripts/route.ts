@@ -4,6 +4,6 @@ import { performance } from 'node:perf_hooks';
 
 export async function GET() {
   const start = performance.now();
-  while (performance.now() - start < 1500) {}
+  while (performance.now() - start < 500) {}
   return NextResponse.json({ scripts: SCRIPTS });
 }

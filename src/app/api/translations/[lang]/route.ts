@@ -5,6 +5,6 @@ import { performance } from 'node:perf_hooks';
 export async function GET(req: NextRequest, context: { params: { lang: string } }) {
   const { lang } = context.params;
   const start = performance.now();
-  while (performance.now() - start < 1800) {}
+  while (performance.now() - start < 800) {}
   return NextResponse.json({ scripts: DUB_SCRIPTS[lang] });
 }
