@@ -5,29 +5,28 @@ import { useEffect, useRef, useState } from 'react';
 import VideoImport from '@/components/customUI/VideoImport';
 import TranscriptContainer from '@/containers/TranscriptContainer';
 
-import { delay } from '@/utils/delay';
 import DropDown from '@/components/customUI/DropDown';
 import CustomLoader from '@/components/customUI/Loader';
-import { SCRIPT_CLIPS, DUB_CLIPS, DUB_SCRIPTS, LANGUAGES, SCRIPTS } from '@/utils/constants';
+import { LANGUAGES } from '@/utils/constants';
 
-import type { ClipType, ScriptType } from '@/utils/constants';
 import AudioContainer from '@/containers/AudioContainer';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { fetchDubScripts, fetchScripts } from '@/redux/features/appSlice';
+import {
+  fetchAudioClip,
+  fetchDubAudioClips,
+  fetchDubScripts,
+  fetchScripts,
+  resetDubClips,
+} from '@/redux/features/appSlice';
 
 //  user flow
 
 const App = () => {
   const dispatch = useAppDispatch();
-
+  const dubClips = useAppSelector((state) => state.appState.dubClips);
   const isScriptLoading = useAppSelector((state) => state.appState.isScriptLoading);
 
-  const [isAudioLoading, setAudioLoading] = useState<boolean>(false);
-  const [isDubAudioLoading, setDubAudioLoading] = useState<boolean>(false);
   const [isFileImported, setFileImported] = useState<boolean>(false);
-
-  const [clips, setClips] = useState<Array<ClipType>>([]);
-  const [dubClips, setDubClips] = useState<Array<ClipType>>([]);
   const [fileName, setFileName] = useState<string>('Unknown.mp4');
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [activeId, setActiveId] = useState<number>(-1);
@@ -40,16 +39,8 @@ const App = () => {
   const uploadFlow = async () => {
     dispatch(fetchScripts());
     dispatch(fetchDubScripts(dubLang));
-
-    setAudioLoading(true);
-    await delay(2000);
-    setClips(SCRIPT_CLIPS);
-    setAudioLoading(false);
-
-    await delay(2000);
-
-    setDubClips(DUB_CLIPS);
-    setDubAudioLoading(false);
+    dispatch(fetchAudioClip());
+    dispatch(fetchDubAudioClips(dubLang));
   };
 
   useEffect(() => {
@@ -85,7 +76,9 @@ const App = () => {
             dropdownContentClass="border border-svm-9 bg-neutral-50"
             onSelect={(lang) => {
               setDubLang(lang);
+              dispatch(resetDubClips());
               dispatch(fetchDubScripts(lang));
+              dispatch(fetchDubAudioClips(lang));
             }}
           />
         </div>
@@ -132,11 +125,8 @@ const App = () => {
       {/* bottom */}
       <AudioContainer
         ref={dubAudioTrackRef}
-        clips={clips}
-        dubClips={dubClips}
         activeId={activeId}
         isFileUploaded={isFileImported}
-        isAudioLoading={isAudioLoading}
         sliderValue={sliderValue}
         onMouseUp={(val: number) => {
           console.log('slider', val);
