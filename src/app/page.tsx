@@ -75,6 +75,7 @@ const App = () => {
             triggerClass="outline-none border-none h-6"
             dropdownContentClass="border border-svm-9 bg-neutral-50"
             onSelect={(lang) => {
+              if(!isFileImported)return;
               setDubLang(lang);
               dispatch(resetDubClips());
               dispatch(fetchDubScripts(lang));
